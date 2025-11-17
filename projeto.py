@@ -200,6 +200,19 @@ def p_termo(p):
              | PARENT_A expressao PARENT_F'''
 
 
+def p_comando_writeln(p):
+    'comando_writeln : WRITELN PARENT_A LIT_STRING PARENT_F PONTO_VIRGULA' 
+
+def p_comando_readln(p):
+    'comando_readln : READLN PARENT_A ID PARENT_F PONTO_VIRGULA'
+
+def p_comando_for(p):
+    'comando_for : FOR ID ASSIGN expressao TO expressao DO comando_atribuicao'
+    #falta downto
+
+
+
+
 
 
 def p_empty(p):
