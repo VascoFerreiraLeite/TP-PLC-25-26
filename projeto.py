@@ -151,7 +151,7 @@ def p_resto(p):
     'resto : vars BEGIN codigo END PONTO'
     print("Resto valido")
     
-    p[0] = p[2]
+    p[0] = ('RESTO', p[1], p[3])
 
 def p_vars(p):
     '''vars : VAR var_list
@@ -178,7 +178,7 @@ def p_id_list(p):
     '''id_list : ID
                | id_list VIRGULA ID'''
     if len(p) == 2:
-        p[0]=p[1] 
+        p[0]=[p[1]] 
     else:
         p[0]=p[1] + [p[3]]
     
@@ -189,15 +189,15 @@ def p_tipo(p):
     p[0] = p[1]
     
 def p_codigo(p):
-    '''codigo: comando_lista
-             | codigo PONTO_VIRGULA comando_lista'''
+    '''codigo : comando_lista
+              | codigo PONTO_VIRGULA comando_lista'''
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[3]]
 
 def p_comando_lista(p):
-    '''comando_lista : comando_atribuicao
+    '''comando_lista : comando_assign
                      | comando_while
                      | comando_for
                      | comando_if
@@ -207,8 +207,8 @@ def p_comando_lista(p):
                      | empty'''
     p[0] = p[1]
     
-def p_comando_atribuicao(p):
-    'comando_atribuicao : ID ASSIGN expressao'
+def p_comando_assign(p):
+    'comando_assign : ID ASSIGN expressao'
     p[0] = ('ASSIGN', p[1], p[3])
 
 def p_while(p):
@@ -245,7 +245,10 @@ def p_expressao(p):
                  | expressao TIMES termo
                  | expressao DIVIDE termo
                  | expressao BOOL'''
-    p[0] = ('CONTA', p[2], p[1], p[3])
+    if len(p)>2:
+        p[0] = ('CONTA', p[2], p[1], p[3])
+    else:
+        p[0] = p[1]
 
 def p_BOOL(p):
     '''BOOL : TRUE
@@ -259,10 +262,17 @@ def p_termo(p):
              | ID
              | LIT_STRING
              | PARENT_A expressao PARENT_F'''
-    if p[1]=='(':
+    if len(p)>2:
         p[0]=p[2]
     else:
-        p[0] = p[1]
+        if p.slice[1].type == 'NUM_INT':
+             p[0] = ('NUM', p[1])
+        elif p.slice[1].type == 'NUM_REAL':
+             p[0] = ('REAL', p[1])
+        elif p.slice[1].type == 'ID':
+             p[0] = ('VAR', p[1]) # Importante para ir buscar à tabela
+        elif p.slice[1].type == 'LIT_STRING':
+             p[0] = ('STR', p[1])
 
 def p_argumentos(p):
     '''argumentos : expressao
@@ -270,7 +280,7 @@ def p_argumentos(p):
     if len(p) == 2:
         p[0] = [p[1]]  
     else: 
-        p[1] + [p[3]]
+        p[0] = p[1] + [p[3]]
 
 
 
@@ -286,20 +296,65 @@ def p_error(p):
     
 parser = yacc.yacc()
 
+
+
+#------------------------------------
+#-- Obter tipos (incompleto) ---
+
+
+def obter_tipo(nodo):
+    #if isinstance(nodo, int):
+        #return 'INTEGER'
+    #if isinstance(nodo, str):
+        #return 'STRING'
+    #if isinstance(nodo, float):
+        #return 'REAL'
+    #if nodo == 'true' or nodo == 'false':
+        #return 'BOOLEAN'
+
+    caixa=nodo[0]
+
+    if caixa=='NUM':
+        return 'INTEGER'
+    if caixa=='REAL':
+        return 'REAL'
+    if caixa=='STR':
+        return 'STRING'
+
+    if caixa=='VAR':
+        var=nodo[1]
+        if var in tabela:
+            return tabela[var].upper()
+        else:
+            #debug
+            print(f"Erro semântico: variável '{var}' não declarada.")
+            return None
+
+    if caixa=='CONTA':
+        tipo_esq=obter_tipo(nodo[2])
+        tipo_dir=obter_tipo(nodo[3])
+        if tipo_esq=='INTEGER' and tipo_dir=='INTEGER':
+            return 'INTEGER'
+        else:
+            print(f"Erro semântico: tipos diferentes esq: '{tipo_esq}', dir: '{tipo_dir}'")
+            return None
+
+
 #------------------------------------
 #-- Analisador Semântico (incompleto) ---
 
 tabela={}
 
-
-def analisador_semantico():
+def analisador_semantico(nodo):
     #talvez tirar
-    if not isinstance(nodo, tuple):
-        return
 
+    if nodo is None:
+        return
     if isinstance(nodo, list):
         for n in nodo:
-            anasalisador_semantico(n)
+            analisador_semantico(n)
+        return
+    if not isinstance(nodo, tuple):
         return
     
     caixa=nodo[0]
@@ -309,14 +364,18 @@ def analisador_semantico():
 
     elif caixa=='VARS':
         vars_lista=nodo[1]
-        tipo=nodo[2]
+        tipo=nodo[2].upper()
         for var in vars_lista:
             if var in tabela:
                 print(f"Erro semântico: variável '{var}' já declarada.")
-        else:
-            tabela[var]=tipo
-            #debug tirar dps
-            print(f"Variável '{var}' declarada como '{tipo}'.")
+            else:
+                tabela[var]=tipo
+                #debug tirar dps
+                print(f"Variável '{var}' declarada como '{tipo}'.")
+
+    elif caixa=='RESTO':
+        analisador_semantico(nodo[1])  #vars
+        analisador_semantico(nodo[2])  #codigo
 
     elif caixa=='ASSIGN':
         var=nodo[1]
@@ -324,36 +383,156 @@ def analisador_semantico():
         if var not in tabela:
             print(f"Erro semântico: variável '{var}' não declarada.")
         else:
+            tipo_var=tabela[var].upper()
+            tipo_obtido=obter_tipo(expressao)
+            if tipo_var != tipo_obtido:
+                print(f"Erro semântico: tipo esperado diferente do obtido, esperado: '{tipo_var}', obtido: '{tipo_obtido}'")
+            else:
+                #debug
+                print(f"(ASSIGN)Atribuição válida à variável '{var}' do tipo '{tipo_var}'.")
             analisador_semantico(expressao)
-
-
-
-
-
-
-
-
-
-
-#--
-def percorre(p):
-    etiqueta=p[0]
-    #if etiqueta=='PROGRAM':
-    if etiqueta=='VARS':
-        ids=p[1]
-        tipo=p[3]
-        if isinstance(ids, list):
-            for id in ids:
-                tabela[id]=tipo
+        
+    elif caixa=='CONTA':
+        analisador_semantico(nodo[2])
+        analisador_semantico(nodo[3])
+    
+    elif caixa=='WHILE':
+        analisador_semantico(nodo[1])
+        analisador_semantico(nodo[2])
+    
+    elif caixa=='FOR':
+        var=nodo[1]
+        inicio=nodo[2]
+        fim=nodo[3]
+        if var not in tabela:
+            print(f"Erro semântico: variável '{var}' não declarada.")
         else:
-            tabela[ids]=tipo
+            tipo_var=tabela[var].upper()
+            if tipo_var!='INTEGER':
+                print(f"(FOR)Erro semântico: contador não é inteiro")
+            tipo_inicio=obter_tipo(inicio)
+            tipo_fim=obter_tipo(fim)
+            if tipo_inicio!= 'INTEGER':
+                print(f"(FOR)Erro semântico: valor incial não é inteiro")
+            else:
+                print(f"(FOR) Inicialização válida do ciclo: '{var}' <- {tipo_inicio}")            
+            if tipo_fim!= 'INTEGER':
+                print(f"(FOR)Erro semântico: valor final não é inteiro")
+
+            analisador_semantico(nodo[4])#comandos
+
+    elif caixa=='WRITELN':
+        argumentos=nodo[1]
+        for arg in argumentos:
+            analisador_semantico(arg)
+
+
+#------------------------------------
+#-- geraçao de codigo (incompleto) ---
+
+endereco={}
+indice=0
+qt_for=0
+
+for i in tabela:
+    endereco[i]=indice
+    indice+=1
+
+    
+def geracao_codigo(nodo):
+    #mema coisa
+    global qt_for
+    if nodo is None:
+        return
+    if isinstance(nodo, list):
+        for n in nodo:
+            geracao_codigo(n)
+        return
+    if not isinstance(nodo, tuple):
+        return
+
+    caixa=nodo[0]
+    if caixa=='PROGRAM':
+        print("start")
+        tam_vars=len(tabela.keys())
+        #mudar dps para todos tipos, identificar tipo e push
+        for i in range(tam_vars):
+            print(f"\tpushi 0")
+        
+        geracao_codigo(nodo[2])
+        print("stop")
+    
+    elif caixa=='RESTO':
+        geracao_codigo(nodo[2])
+
+    elif caixa=='WRITELN':
+        args=nodo[1]
+        for arg in args:
+            if isinstance(arg, tuple) and arg[0]=='STR':
+                print(f"\tpushs \"{arg[1]}\"")
+                print("\twrites")
+            else:
+                geracao_codigo(arg) 
+                print("\twritei")
+            
+    elif caixa=='READLN':
+        var_e=endereco[nodo[1]]
+        print("\tread")
+        print("\tatoi")
+        print(f"\tstoreg {var_e}")
+    
+    elif caixa=='ASSIGN':
+        #otimizar
+        var=nodo[1]
+        valor=nodo[2]
+        geracao_codigo(valor)
+        print(f"\tstoreg {endereco[var]}")
+
+    elif caixa=='NUM':
+        print(f"\tpushi {nodo[1]}")
+
+    elif caixa=='CONTA':
+        sinal=nodo[1]
+        geracao_codigo(nodo[2])
+        geracao_codigo(nodo[3])
+        sinais={'+':'add', '-':'sub', '*':'mul', '/':'div', 'mod':'mod'}
+        print(f"\t{sinais.get(sinal)}")
+
+    elif caixa=='FOR':
+        #for i := 1 to n do
+        var=nodo[1]
+        inicio=nodo[2]
+        fim=nodo[3]
+        resto=nodo[4]
+        qt_for+=1
+        geracao_codigo(inicio)
+        print(f"\tstoreg {endereco[var]}")
+        print(f"in{qt_for}:")
+
+        print(f"\tpushg {endereco[var]}")
+        geracao_codigo(fim)
+        print(f"\tinfeq")
+        print(f"\tjz out{qt_for}")
+
+        geracao_codigo(resto)
+
+        print(f"\tpushg {endereco[var]}")
+        print(f"\tpushi 1")
+        print(f"\tadd")
+        print(f"\tstoreg {endereco[var]}")
+
+        print(f"\tjump in{qt_for}")
+        print(f"out{qt_for}:")
+
+    elif caixa=='VAR':
+        print(f"\tpushg {endereco[nodo[1]]}")
 
 
 
 
 
 if __name__ == '__main__':
-    #codigo teste
+    # Exemplo do Fatorial
     pascal_code = """
 program Fatorial;
 var
@@ -363,18 +542,42 @@ begin
  readln(n);
  fat := 1;
  for i := 1 to n do
- fat := fat * i;
+    fat := fat * i;
  writeln('Fatorial de ', n, ': ', fat);
 end.
 """
 
+    print("--- 1. LEXER & PARSER ---")
     lexer.input(pascal_code)
-    parser.parse(pascal_code, lexer=lexer)
+    try:
+        arvore = parser.parse(pascal_code, lexer=lexer)
+    except Exception as e:
+        print(f"Erro Fatal no Parser: {e}")
+        arvore = None
 
-    while True:
-        tok = lexer.token()
-        if not tok:
-            break
-        print(tok)
+    if arvore:
+        print("\n--- 2. ANÁLISE SEMÂNTICA ---")
+        # Limpar tabela antes de começar (boa prática)
+        tabela.clear() 
+        analisador_semantico(arvore)
+        
+        print("\n>> Tabela de Símbolos:")
+        print(tabela)
 
+        print("\n--- 3. GERAÇÃO DE CÓDIGO (Assembly) ---")
+        
+        # Passo A: Mapear Variáveis para Endereços (0, 1, 2...)
+        # Usamos a ordem da tabela de símbolos
+        idx = 0
+        for nome_var in tabela:
+            endereco[nome_var] = idx
+            idx += 1
+        
+        print(f">> Mapa de Memória: {endereco}\n")
+        print("---------------- CÓDIGO GERADO ----------------")
+        
+        # Passo B: Gerar o Código
+        geracao_codigo(arvore)
+        
+        print("-----------------------------------------------")
     
