@@ -542,8 +542,7 @@ def geracao_codigo(nodo):
         sinal = nodo[1]
         geracao_codigo(nodo[2])
         geracao_codigo(nodo[3])
-        
-        # AQUI ESTAVA O PROBLEMA DOS "NONE"
+
         # O dicionário tem de ter TODAS as operações usadas
         sinais = {
             '+': 'add', '-': 'sub', '*': 'mul', '/': 'div', 
@@ -594,7 +593,7 @@ def geracao_codigo(nodo):
         print(f"{lbl_fim}:")
 
     elif caixa == 'FOR':
-        # Mantive o teu código original do FOR, só adaptei ligeiramente
+
         var = nodo[1]
         inicio = nodo[2]
         fim = nodo[3]
@@ -627,7 +626,7 @@ def geracao_codigo(nodo):
 
 
 if __name__ == '__main__':
-    # Exemplo do Fatorial
+    # Exemplo do NUMERO PRIMO
     pascal_code = """
 program NumeroPrimo;
 var
