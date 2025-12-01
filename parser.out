@@ -2,19 +2,13 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    AND
     APOST
     ARRAY
-    DIV
     DOWNTO
-    ELSE
-    EQUAL
     FUNCTION
     MAIOR
     MAIOR_IGUAL
     MENOR
-    MENOR_IGUAL
-    MOD
     OF
     PARENT_Q_A
     PARENT_Q_F
@@ -48,97 +42,105 @@ Rule 23    comando_assign -> ID ASSIGN expressao
 Rule 24    comando_while -> WHILE expressao DO comando_lista
 Rule 25    comando_for -> FOR ID ASSIGN expressao TO expressao DO comando_lista
 Rule 26    comando_if -> IF expressao THEN comando_lista
-Rule 27    comando_writeln -> WRITELN PARENT_A argumentos PARENT_F
-Rule 28    comando_readln -> READLN PARENT_A ID PARENT_F
-Rule 29    comando_begin -> BEGIN codigo END
-Rule 30    expressao -> termo
-Rule 31    expressao -> expressao PLUS termo
-Rule 32    expressao -> expressao MINUS termo
-Rule 33    expressao -> expressao TIMES termo
-Rule 34    expressao -> expressao DIVIDE termo
-Rule 35    expressao -> expressao BOOL
-Rule 36    BOOL -> TRUE
-Rule 37    BOOL -> FALSE
-Rule 38    termo -> NUM_INT
-Rule 39    termo -> NUM_REAL
-Rule 40    termo -> ID
-Rule 41    termo -> LIT_STRING
-Rule 42    termo -> PARENT_A expressao PARENT_F
-Rule 43    argumentos -> expressao
-Rule 44    argumentos -> argumentos VIRGULA expressao
-Rule 45    empty -> <empty>
+Rule 27    comando_if -> IF expressao THEN comando_lista ELSE comando_lista
+Rule 28    comando_writeln -> WRITELN PARENT_A argumentos PARENT_F
+Rule 29    comando_readln -> READLN PARENT_A ID PARENT_F
+Rule 30    comando_begin -> BEGIN codigo END
+Rule 31    expressao -> termo
+Rule 32    expressao -> expressao PLUS termo
+Rule 33    expressao -> expressao MINUS termo
+Rule 34    expressao -> expressao TIMES termo
+Rule 35    expressao -> expressao DIVIDE termo
+Rule 36    expressao -> expressao DIV termo
+Rule 37    expressao -> expressao MOD termo
+Rule 38    expressao -> expressao AND expressao
+Rule 39    expressao -> expressao EQUAL expressao
+Rule 40    expressao -> expressao MENOR_IGUAL expressao
+Rule 41    expressao -> expressao BOOL
+Rule 42    BOOL -> TRUE
+Rule 43    BOOL -> FALSE
+Rule 44    termo -> NUM_INT
+Rule 45    termo -> NUM_REAL
+Rule 46    termo -> ID
+Rule 47    termo -> LIT_STRING
+Rule 48    termo -> TRUE
+Rule 49    termo -> FALSE
+Rule 50    termo -> PARENT_A expressao PARENT_F
+Rule 51    argumentos -> expressao
+Rule 52    argumentos -> argumentos VIRGULA expressao
+Rule 53    empty -> <empty>
 
 Terminals, with rules where they appear
 
-AND                  : 
+AND                  : 38
 APOST                : 
 ARRAY                : 
 ASSIGN               : 23 25
-BEGIN                : 2 29
+BEGIN                : 2 30
 BOOLEAN              : 12
-DIV                  : 
-DIVIDE               : 34
+DIV                  : 36
+DIVIDE               : 35
 DO                   : 24 25
 DOIS_PONTOS          : 7
 DOWNTO               : 
-ELSE                 : 
-END                  : 2 29
-EQUAL                : 
-FALSE                : 37
+ELSE                 : 27
+END                  : 2 30
+EQUAL                : 39
+FALSE                : 43 49
 FOR                  : 25
 FUNCTION             : 
-ID                   : 1 8 9 23 25 28 40
-IF                   : 26
+ID                   : 1 8 9 23 25 29 46
+IF                   : 26 27
 INTEGER              : 10
-LIT_STRING           : 41
+LIT_STRING           : 47
 MAIOR                : 
 MAIOR_IGUAL          : 
 MENOR                : 
-MENOR_IGUAL          : 
-MINUS                : 32
-MOD                  : 
-NUM_INT              : 38
-NUM_REAL             : 39
+MENOR_IGUAL          : 40
+MINUS                : 33
+MOD                  : 37
+NUM_INT              : 44
+NUM_REAL             : 45
 OF                   : 
-PARENT_A             : 27 28 42
-PARENT_F             : 27 28 42
+PARENT_A             : 28 29 50
+PARENT_F             : 28 29 50
 PARENT_Q_A           : 
 PARENT_Q_F           : 
-PLUS                 : 31
+PLUS                 : 32
 PONTO                : 2
 PONTO_VIRGULA        : 1 7 14
 PROGRAM              : 1
-READLN               : 28
+READLN               : 29
 STRING               : 11
-THEN                 : 26
-TIMES                : 33
+THEN                 : 26 27
+TIMES                : 34
 TO                   : 25
-TRUE                 : 36
+TRUE                 : 42 48
 VAR                  : 3
-VIRGULA              : 9 44
+VIRGULA              : 9 52
 WHILE                : 24
-WRITELN              : 27
+WRITELN              : 28
 error                : 
 
 Nonterminals, with rules where they appear
 
-BOOL                 : 35
-argumentos           : 27 44
-codigo               : 2 14 29
+BOOL                 : 41
+argumentos           : 28 52
+codigo               : 2 14 30
 comando_assign       : 15
 comando_begin        : 21
 comando_for          : 17
 comando_if           : 18
-comando_lista        : 13 14 24 25 26
+comando_lista        : 13 14 24 25 26 27 27
 comando_readln       : 20
 comando_while        : 16
 comando_writeln      : 19
 empty                : 4 22
-expressao            : 23 24 25 25 26 31 32 33 34 35 42 43 44
+expressao            : 23 24 25 25 26 27 32 33 34 35 36 37 38 38 39 39 40 40 41 50 51 52
 id_list              : 7 9
 program              : 0
 resto                : 1
-termo                : 30 31 32 33 34
+termo                : 31 32 33 34 35 36 37
 tipo                 : 7
 var                  : 5 6
 var_list             : 3 6
@@ -181,10 +183,10 @@ state 4
     (2) resto -> . vars BEGIN codigo END PONTO
     (3) vars -> . VAR var_list
     (4) vars -> . empty
-    (45) empty -> .
+    (53) empty -> .
 
     VAR             shift and go to state 7
-    BEGIN           reduce using rule 45 (empty -> .)
+    BEGIN           reduce using rule 53 (empty -> .)
 
     resto                          shift and go to state 5
     vars                           shift and go to state 6
@@ -243,10 +245,11 @@ state 9
     (24) comando_while -> . WHILE expressao DO comando_lista
     (25) comando_for -> . FOR ID ASSIGN expressao TO expressao DO comando_lista
     (26) comando_if -> . IF expressao THEN comando_lista
-    (27) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
-    (28) comando_readln -> . READLN PARENT_A ID PARENT_F
-    (29) comando_begin -> . BEGIN codigo END
-    (45) empty -> .
+    (27) comando_if -> . IF expressao THEN comando_lista ELSE comando_lista
+    (28) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
+    (29) comando_readln -> . READLN PARENT_A ID PARENT_F
+    (30) comando_begin -> . BEGIN codigo END
+    (53) empty -> .
 
     ID              shift and go to state 25
     WHILE           shift and go to state 26
@@ -255,8 +258,8 @@ state 9
     WRITELN         shift and go to state 29
     READLN          shift and go to state 30
     BEGIN           shift and go to state 14
-    END             reduce using rule 45 (empty -> .)
-    PONTO_VIRGULA   reduce using rule 45 (empty -> .)
+    END             reduce using rule 53 (empty -> .)
+    PONTO_VIRGULA   reduce using rule 53 (empty -> .)
 
     codigo                         shift and go to state 15
     comando_lista                  shift and go to state 16
@@ -310,7 +313,7 @@ state 13
 
 state 14
 
-    (29) comando_begin -> BEGIN . codigo END
+    (30) comando_begin -> BEGIN . codigo END
     (13) codigo -> . comando_lista
     (14) codigo -> . codigo PONTO_VIRGULA comando_lista
     (15) comando_lista -> . comando_assign
@@ -325,10 +328,11 @@ state 14
     (24) comando_while -> . WHILE expressao DO comando_lista
     (25) comando_for -> . FOR ID ASSIGN expressao TO expressao DO comando_lista
     (26) comando_if -> . IF expressao THEN comando_lista
-    (27) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
-    (28) comando_readln -> . READLN PARENT_A ID PARENT_F
-    (29) comando_begin -> . BEGIN codigo END
-    (45) empty -> .
+    (27) comando_if -> . IF expressao THEN comando_lista ELSE comando_lista
+    (28) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
+    (29) comando_readln -> . READLN PARENT_A ID PARENT_F
+    (30) comando_begin -> . BEGIN codigo END
+    (53) empty -> .
 
     ID              shift and go to state 25
     WHILE           shift and go to state 26
@@ -337,8 +341,8 @@ state 14
     WRITELN         shift and go to state 29
     READLN          shift and go to state 30
     BEGIN           shift and go to state 14
-    END             reduce using rule 45 (empty -> .)
-    PONTO_VIRGULA   reduce using rule 45 (empty -> .)
+    END             reduce using rule 53 (empty -> .)
+    PONTO_VIRGULA   reduce using rule 53 (empty -> .)
 
     codigo                         shift and go to state 34
     comando_lista                  shift and go to state 16
@@ -374,6 +378,7 @@ state 17
 
     END             reduce using rule 15 (comando_lista -> comando_assign .)
     PONTO_VIRGULA   reduce using rule 15 (comando_lista -> comando_assign .)
+    ELSE            reduce using rule 15 (comando_lista -> comando_assign .)
 
 
 state 18
@@ -382,6 +387,7 @@ state 18
 
     END             reduce using rule 16 (comando_lista -> comando_while .)
     PONTO_VIRGULA   reduce using rule 16 (comando_lista -> comando_while .)
+    ELSE            reduce using rule 16 (comando_lista -> comando_while .)
 
 
 state 19
@@ -390,6 +396,7 @@ state 19
 
     END             reduce using rule 17 (comando_lista -> comando_for .)
     PONTO_VIRGULA   reduce using rule 17 (comando_lista -> comando_for .)
+    ELSE            reduce using rule 17 (comando_lista -> comando_for .)
 
 
 state 20
@@ -398,6 +405,7 @@ state 20
 
     END             reduce using rule 18 (comando_lista -> comando_if .)
     PONTO_VIRGULA   reduce using rule 18 (comando_lista -> comando_if .)
+    ELSE            reduce using rule 18 (comando_lista -> comando_if .)
 
 
 state 21
@@ -406,6 +414,7 @@ state 21
 
     END             reduce using rule 19 (comando_lista -> comando_writeln .)
     PONTO_VIRGULA   reduce using rule 19 (comando_lista -> comando_writeln .)
+    ELSE            reduce using rule 19 (comando_lista -> comando_writeln .)
 
 
 state 22
@@ -414,6 +423,7 @@ state 22
 
     END             reduce using rule 20 (comando_lista -> comando_readln .)
     PONTO_VIRGULA   reduce using rule 20 (comando_lista -> comando_readln .)
+    ELSE            reduce using rule 20 (comando_lista -> comando_readln .)
 
 
 state 23
@@ -422,6 +432,7 @@ state 23
 
     END             reduce using rule 21 (comando_lista -> comando_begin .)
     PONTO_VIRGULA   reduce using rule 21 (comando_lista -> comando_begin .)
+    ELSE            reduce using rule 21 (comando_lista -> comando_begin .)
 
 
 state 24
@@ -430,6 +441,7 @@ state 24
 
     END             reduce using rule 22 (comando_lista -> empty .)
     PONTO_VIRGULA   reduce using rule 22 (comando_lista -> empty .)
+    ELSE            reduce using rule 22 (comando_lista -> empty .)
 
 
 state 25
@@ -442,23 +454,32 @@ state 25
 state 26
 
     (24) comando_while -> WHILE . expressao DO comando_lista
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
     expressao                      shift and go to state 38
     termo                          shift and go to state 39
@@ -467,45 +488,55 @@ state 27
 
     (25) comando_for -> FOR . ID ASSIGN expressao TO expressao DO comando_lista
 
-    ID              shift and go to state 45
+    ID              shift and go to state 47
 
 
 state 28
 
     (26) comando_if -> IF . expressao THEN comando_lista
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (27) comando_if -> IF . expressao THEN comando_lista ELSE comando_lista
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
-    expressao                      shift and go to state 46
+    expressao                      shift and go to state 48
     termo                          shift and go to state 39
 
 state 29
 
-    (27) comando_writeln -> WRITELN . PARENT_A argumentos PARENT_F
+    (28) comando_writeln -> WRITELN . PARENT_A argumentos PARENT_F
 
-    PARENT_A        shift and go to state 47
+    PARENT_A        shift and go to state 49
 
 
 state 30
 
-    (28) comando_readln -> READLN . PARENT_A ID PARENT_F
+    (29) comando_readln -> READLN . PARENT_A ID PARENT_F
 
-    PARENT_A        shift and go to state 48
+    PARENT_A        shift and go to state 50
 
 
 state 31
@@ -523,25 +554,25 @@ state 32
     (11) tipo -> . STRING
     (12) tipo -> . BOOLEAN
 
-    INTEGER         shift and go to state 50
-    STRING          shift and go to state 51
-    BOOLEAN         shift and go to state 52
+    INTEGER         shift and go to state 52
+    STRING          shift and go to state 53
+    BOOLEAN         shift and go to state 54
 
-    tipo                           shift and go to state 49
+    tipo                           shift and go to state 51
 
 state 33
 
     (9) id_list -> id_list VIRGULA . ID
 
-    ID              shift and go to state 53
+    ID              shift and go to state 55
 
 
 state 34
 
-    (29) comando_begin -> BEGIN codigo . END
+    (30) comando_begin -> BEGIN codigo . END
     (14) codigo -> codigo . PONTO_VIRGULA comando_lista
 
-    END             shift and go to state 54
+    END             shift and go to state 56
     PONTO_VIRGULA   shift and go to state 36
 
 
@@ -549,7 +580,7 @@ state 35
 
     (2) resto -> vars BEGIN codigo END . PONTO
 
-    PONTO           shift and go to state 55
+    PONTO           shift and go to state 57
 
 
 state 36
@@ -567,10 +598,11 @@ state 36
     (24) comando_while -> . WHILE expressao DO comando_lista
     (25) comando_for -> . FOR ID ASSIGN expressao TO expressao DO comando_lista
     (26) comando_if -> . IF expressao THEN comando_lista
-    (27) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
-    (28) comando_readln -> . READLN PARENT_A ID PARENT_F
-    (29) comando_begin -> . BEGIN codigo END
-    (45) empty -> .
+    (27) comando_if -> . IF expressao THEN comando_lista ELSE comando_lista
+    (28) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
+    (29) comando_readln -> . READLN PARENT_A ID PARENT_F
+    (30) comando_begin -> . BEGIN codigo END
+    (53) empty -> .
 
     ID              shift and go to state 25
     WHILE           shift and go to state 26
@@ -579,10 +611,10 @@ state 36
     WRITELN         shift and go to state 29
     READLN          shift and go to state 30
     BEGIN           shift and go to state 14
-    END             reduce using rule 45 (empty -> .)
-    PONTO_VIRGULA   reduce using rule 45 (empty -> .)
+    END             reduce using rule 53 (empty -> .)
+    PONTO_VIRGULA   reduce using rule 53 (empty -> .)
 
-    comando_lista                  shift and go to state 56
+    comando_lista                  shift and go to state 58
     comando_assign                 shift and go to state 17
     comando_while                  shift and go to state 18
     comando_for                    shift and go to state 19
@@ -595,258 +627,386 @@ state 36
 state 37
 
     (23) comando_assign -> ID ASSIGN . expressao
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
-    expressao                      shift and go to state 57
+    expressao                      shift and go to state 59
     termo                          shift and go to state 39
 
 state 38
 
     (24) comando_while -> WHILE expressao . DO comando_lista
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
 
-    DO              shift and go to state 58
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
+    DO              shift and go to state 60
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
 
-    BOOL                           shift and go to state 63
+    BOOL                           shift and go to state 70
 
 state 39
 
-    (30) expressao -> termo .
+    (31) expressao -> termo .
 
-    DO              reduce using rule 30 (expressao -> termo .)
-    PLUS            reduce using rule 30 (expressao -> termo .)
-    MINUS           reduce using rule 30 (expressao -> termo .)
-    TIMES           reduce using rule 30 (expressao -> termo .)
-    DIVIDE          reduce using rule 30 (expressao -> termo .)
-    TRUE            reduce using rule 30 (expressao -> termo .)
-    FALSE           reduce using rule 30 (expressao -> termo .)
-    THEN            reduce using rule 30 (expressao -> termo .)
-    END             reduce using rule 30 (expressao -> termo .)
-    PONTO_VIRGULA   reduce using rule 30 (expressao -> termo .)
-    PARENT_F        reduce using rule 30 (expressao -> termo .)
-    VIRGULA         reduce using rule 30 (expressao -> termo .)
-    TO              reduce using rule 30 (expressao -> termo .)
+    DO              reduce using rule 31 (expressao -> termo .)
+    PLUS            reduce using rule 31 (expressao -> termo .)
+    MINUS           reduce using rule 31 (expressao -> termo .)
+    TIMES           reduce using rule 31 (expressao -> termo .)
+    DIVIDE          reduce using rule 31 (expressao -> termo .)
+    DIV             reduce using rule 31 (expressao -> termo .)
+    MOD             reduce using rule 31 (expressao -> termo .)
+    AND             reduce using rule 31 (expressao -> termo .)
+    EQUAL           reduce using rule 31 (expressao -> termo .)
+    MENOR_IGUAL     reduce using rule 31 (expressao -> termo .)
+    TRUE            reduce using rule 31 (expressao -> termo .)
+    FALSE           reduce using rule 31 (expressao -> termo .)
+    THEN            reduce using rule 31 (expressao -> termo .)
+    END             reduce using rule 31 (expressao -> termo .)
+    PONTO_VIRGULA   reduce using rule 31 (expressao -> termo .)
+    ELSE            reduce using rule 31 (expressao -> termo .)
+    PARENT_F        reduce using rule 31 (expressao -> termo .)
+    VIRGULA         reduce using rule 31 (expressao -> termo .)
+    TO              reduce using rule 31 (expressao -> termo .)
 
 
 state 40
 
-    (38) termo -> NUM_INT .
+    (44) termo -> NUM_INT .
 
-    DO              reduce using rule 38 (termo -> NUM_INT .)
-    PLUS            reduce using rule 38 (termo -> NUM_INT .)
-    MINUS           reduce using rule 38 (termo -> NUM_INT .)
-    TIMES           reduce using rule 38 (termo -> NUM_INT .)
-    DIVIDE          reduce using rule 38 (termo -> NUM_INT .)
-    TRUE            reduce using rule 38 (termo -> NUM_INT .)
-    FALSE           reduce using rule 38 (termo -> NUM_INT .)
-    THEN            reduce using rule 38 (termo -> NUM_INT .)
-    END             reduce using rule 38 (termo -> NUM_INT .)
-    PONTO_VIRGULA   reduce using rule 38 (termo -> NUM_INT .)
-    PARENT_F        reduce using rule 38 (termo -> NUM_INT .)
-    VIRGULA         reduce using rule 38 (termo -> NUM_INT .)
-    TO              reduce using rule 38 (termo -> NUM_INT .)
+    DO              reduce using rule 44 (termo -> NUM_INT .)
+    PLUS            reduce using rule 44 (termo -> NUM_INT .)
+    MINUS           reduce using rule 44 (termo -> NUM_INT .)
+    TIMES           reduce using rule 44 (termo -> NUM_INT .)
+    DIVIDE          reduce using rule 44 (termo -> NUM_INT .)
+    DIV             reduce using rule 44 (termo -> NUM_INT .)
+    MOD             reduce using rule 44 (termo -> NUM_INT .)
+    AND             reduce using rule 44 (termo -> NUM_INT .)
+    EQUAL           reduce using rule 44 (termo -> NUM_INT .)
+    MENOR_IGUAL     reduce using rule 44 (termo -> NUM_INT .)
+    TRUE            reduce using rule 44 (termo -> NUM_INT .)
+    FALSE           reduce using rule 44 (termo -> NUM_INT .)
+    THEN            reduce using rule 44 (termo -> NUM_INT .)
+    END             reduce using rule 44 (termo -> NUM_INT .)
+    PONTO_VIRGULA   reduce using rule 44 (termo -> NUM_INT .)
+    ELSE            reduce using rule 44 (termo -> NUM_INT .)
+    PARENT_F        reduce using rule 44 (termo -> NUM_INT .)
+    VIRGULA         reduce using rule 44 (termo -> NUM_INT .)
+    TO              reduce using rule 44 (termo -> NUM_INT .)
 
 
 state 41
 
-    (39) termo -> NUM_REAL .
+    (45) termo -> NUM_REAL .
 
-    DO              reduce using rule 39 (termo -> NUM_REAL .)
-    PLUS            reduce using rule 39 (termo -> NUM_REAL .)
-    MINUS           reduce using rule 39 (termo -> NUM_REAL .)
-    TIMES           reduce using rule 39 (termo -> NUM_REAL .)
-    DIVIDE          reduce using rule 39 (termo -> NUM_REAL .)
-    TRUE            reduce using rule 39 (termo -> NUM_REAL .)
-    FALSE           reduce using rule 39 (termo -> NUM_REAL .)
-    THEN            reduce using rule 39 (termo -> NUM_REAL .)
-    END             reduce using rule 39 (termo -> NUM_REAL .)
-    PONTO_VIRGULA   reduce using rule 39 (termo -> NUM_REAL .)
-    PARENT_F        reduce using rule 39 (termo -> NUM_REAL .)
-    VIRGULA         reduce using rule 39 (termo -> NUM_REAL .)
-    TO              reduce using rule 39 (termo -> NUM_REAL .)
+    DO              reduce using rule 45 (termo -> NUM_REAL .)
+    PLUS            reduce using rule 45 (termo -> NUM_REAL .)
+    MINUS           reduce using rule 45 (termo -> NUM_REAL .)
+    TIMES           reduce using rule 45 (termo -> NUM_REAL .)
+    DIVIDE          reduce using rule 45 (termo -> NUM_REAL .)
+    DIV             reduce using rule 45 (termo -> NUM_REAL .)
+    MOD             reduce using rule 45 (termo -> NUM_REAL .)
+    AND             reduce using rule 45 (termo -> NUM_REAL .)
+    EQUAL           reduce using rule 45 (termo -> NUM_REAL .)
+    MENOR_IGUAL     reduce using rule 45 (termo -> NUM_REAL .)
+    TRUE            reduce using rule 45 (termo -> NUM_REAL .)
+    FALSE           reduce using rule 45 (termo -> NUM_REAL .)
+    THEN            reduce using rule 45 (termo -> NUM_REAL .)
+    END             reduce using rule 45 (termo -> NUM_REAL .)
+    PONTO_VIRGULA   reduce using rule 45 (termo -> NUM_REAL .)
+    ELSE            reduce using rule 45 (termo -> NUM_REAL .)
+    PARENT_F        reduce using rule 45 (termo -> NUM_REAL .)
+    VIRGULA         reduce using rule 45 (termo -> NUM_REAL .)
+    TO              reduce using rule 45 (termo -> NUM_REAL .)
 
 
 state 42
 
-    (40) termo -> ID .
+    (46) termo -> ID .
 
-    DO              reduce using rule 40 (termo -> ID .)
-    PLUS            reduce using rule 40 (termo -> ID .)
-    MINUS           reduce using rule 40 (termo -> ID .)
-    TIMES           reduce using rule 40 (termo -> ID .)
-    DIVIDE          reduce using rule 40 (termo -> ID .)
-    TRUE            reduce using rule 40 (termo -> ID .)
-    FALSE           reduce using rule 40 (termo -> ID .)
-    THEN            reduce using rule 40 (termo -> ID .)
-    END             reduce using rule 40 (termo -> ID .)
-    PONTO_VIRGULA   reduce using rule 40 (termo -> ID .)
-    PARENT_F        reduce using rule 40 (termo -> ID .)
-    VIRGULA         reduce using rule 40 (termo -> ID .)
-    TO              reduce using rule 40 (termo -> ID .)
+    DO              reduce using rule 46 (termo -> ID .)
+    PLUS            reduce using rule 46 (termo -> ID .)
+    MINUS           reduce using rule 46 (termo -> ID .)
+    TIMES           reduce using rule 46 (termo -> ID .)
+    DIVIDE          reduce using rule 46 (termo -> ID .)
+    DIV             reduce using rule 46 (termo -> ID .)
+    MOD             reduce using rule 46 (termo -> ID .)
+    AND             reduce using rule 46 (termo -> ID .)
+    EQUAL           reduce using rule 46 (termo -> ID .)
+    MENOR_IGUAL     reduce using rule 46 (termo -> ID .)
+    TRUE            reduce using rule 46 (termo -> ID .)
+    FALSE           reduce using rule 46 (termo -> ID .)
+    THEN            reduce using rule 46 (termo -> ID .)
+    END             reduce using rule 46 (termo -> ID .)
+    PONTO_VIRGULA   reduce using rule 46 (termo -> ID .)
+    ELSE            reduce using rule 46 (termo -> ID .)
+    PARENT_F        reduce using rule 46 (termo -> ID .)
+    VIRGULA         reduce using rule 46 (termo -> ID .)
+    TO              reduce using rule 46 (termo -> ID .)
 
 
 state 43
 
-    (41) termo -> LIT_STRING .
+    (47) termo -> LIT_STRING .
 
-    DO              reduce using rule 41 (termo -> LIT_STRING .)
-    PLUS            reduce using rule 41 (termo -> LIT_STRING .)
-    MINUS           reduce using rule 41 (termo -> LIT_STRING .)
-    TIMES           reduce using rule 41 (termo -> LIT_STRING .)
-    DIVIDE          reduce using rule 41 (termo -> LIT_STRING .)
-    TRUE            reduce using rule 41 (termo -> LIT_STRING .)
-    FALSE           reduce using rule 41 (termo -> LIT_STRING .)
-    THEN            reduce using rule 41 (termo -> LIT_STRING .)
-    END             reduce using rule 41 (termo -> LIT_STRING .)
-    PONTO_VIRGULA   reduce using rule 41 (termo -> LIT_STRING .)
-    PARENT_F        reduce using rule 41 (termo -> LIT_STRING .)
-    VIRGULA         reduce using rule 41 (termo -> LIT_STRING .)
-    TO              reduce using rule 41 (termo -> LIT_STRING .)
+    DO              reduce using rule 47 (termo -> LIT_STRING .)
+    PLUS            reduce using rule 47 (termo -> LIT_STRING .)
+    MINUS           reduce using rule 47 (termo -> LIT_STRING .)
+    TIMES           reduce using rule 47 (termo -> LIT_STRING .)
+    DIVIDE          reduce using rule 47 (termo -> LIT_STRING .)
+    DIV             reduce using rule 47 (termo -> LIT_STRING .)
+    MOD             reduce using rule 47 (termo -> LIT_STRING .)
+    AND             reduce using rule 47 (termo -> LIT_STRING .)
+    EQUAL           reduce using rule 47 (termo -> LIT_STRING .)
+    MENOR_IGUAL     reduce using rule 47 (termo -> LIT_STRING .)
+    TRUE            reduce using rule 47 (termo -> LIT_STRING .)
+    FALSE           reduce using rule 47 (termo -> LIT_STRING .)
+    THEN            reduce using rule 47 (termo -> LIT_STRING .)
+    END             reduce using rule 47 (termo -> LIT_STRING .)
+    PONTO_VIRGULA   reduce using rule 47 (termo -> LIT_STRING .)
+    ELSE            reduce using rule 47 (termo -> LIT_STRING .)
+    PARENT_F        reduce using rule 47 (termo -> LIT_STRING .)
+    VIRGULA         reduce using rule 47 (termo -> LIT_STRING .)
+    TO              reduce using rule 47 (termo -> LIT_STRING .)
 
 
 state 44
 
-    (42) termo -> PARENT_A . expressao PARENT_F
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (48) termo -> TRUE .
 
-    NUM_INT         shift and go to state 40
-    NUM_REAL        shift and go to state 41
-    ID              shift and go to state 42
-    LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    DO              reduce using rule 48 (termo -> TRUE .)
+    PLUS            reduce using rule 48 (termo -> TRUE .)
+    MINUS           reduce using rule 48 (termo -> TRUE .)
+    TIMES           reduce using rule 48 (termo -> TRUE .)
+    DIVIDE          reduce using rule 48 (termo -> TRUE .)
+    DIV             reduce using rule 48 (termo -> TRUE .)
+    MOD             reduce using rule 48 (termo -> TRUE .)
+    AND             reduce using rule 48 (termo -> TRUE .)
+    EQUAL           reduce using rule 48 (termo -> TRUE .)
+    MENOR_IGUAL     reduce using rule 48 (termo -> TRUE .)
+    TRUE            reduce using rule 48 (termo -> TRUE .)
+    FALSE           reduce using rule 48 (termo -> TRUE .)
+    THEN            reduce using rule 48 (termo -> TRUE .)
+    END             reduce using rule 48 (termo -> TRUE .)
+    PONTO_VIRGULA   reduce using rule 48 (termo -> TRUE .)
+    ELSE            reduce using rule 48 (termo -> TRUE .)
+    PARENT_F        reduce using rule 48 (termo -> TRUE .)
+    VIRGULA         reduce using rule 48 (termo -> TRUE .)
+    TO              reduce using rule 48 (termo -> TRUE .)
 
-    expressao                      shift and go to state 66
-    termo                          shift and go to state 39
 
 state 45
 
-    (25) comando_for -> FOR ID . ASSIGN expressao TO expressao DO comando_lista
+    (49) termo -> FALSE .
 
-    ASSIGN          shift and go to state 67
+    DO              reduce using rule 49 (termo -> FALSE .)
+    PLUS            reduce using rule 49 (termo -> FALSE .)
+    MINUS           reduce using rule 49 (termo -> FALSE .)
+    TIMES           reduce using rule 49 (termo -> FALSE .)
+    DIVIDE          reduce using rule 49 (termo -> FALSE .)
+    DIV             reduce using rule 49 (termo -> FALSE .)
+    MOD             reduce using rule 49 (termo -> FALSE .)
+    AND             reduce using rule 49 (termo -> FALSE .)
+    EQUAL           reduce using rule 49 (termo -> FALSE .)
+    MENOR_IGUAL     reduce using rule 49 (termo -> FALSE .)
+    TRUE            reduce using rule 49 (termo -> FALSE .)
+    FALSE           reduce using rule 49 (termo -> FALSE .)
+    THEN            reduce using rule 49 (termo -> FALSE .)
+    END             reduce using rule 49 (termo -> FALSE .)
+    PONTO_VIRGULA   reduce using rule 49 (termo -> FALSE .)
+    ELSE            reduce using rule 49 (termo -> FALSE .)
+    PARENT_F        reduce using rule 49 (termo -> FALSE .)
+    VIRGULA         reduce using rule 49 (termo -> FALSE .)
+    TO              reduce using rule 49 (termo -> FALSE .)
 
 
 state 46
 
-    (26) comando_if -> IF expressao . THEN comando_lista
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
-
-    THEN            shift and go to state 68
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
-
-    BOOL                           shift and go to state 63
-
-state 47
-
-    (27) comando_writeln -> WRITELN PARENT_A . argumentos PARENT_F
-    (43) argumentos -> . expressao
-    (44) argumentos -> . argumentos VIRGULA expressao
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (50) termo -> PARENT_A . expressao PARENT_F
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
-    argumentos                     shift and go to state 69
-    expressao                      shift and go to state 70
+    expressao                      shift and go to state 73
     termo                          shift and go to state 39
+
+state 47
+
+    (25) comando_for -> FOR ID . ASSIGN expressao TO expressao DO comando_lista
+
+    ASSIGN          shift and go to state 74
+
 
 state 48
 
-    (28) comando_readln -> READLN PARENT_A . ID PARENT_F
+    (26) comando_if -> IF expressao . THEN comando_lista
+    (27) comando_if -> IF expressao . THEN comando_lista ELSE comando_lista
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
 
-    ID              shift and go to state 71
+    THEN            shift and go to state 75
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
 
+    BOOL                           shift and go to state 70
 
 state 49
 
-    (7) var -> id_list DOIS_PONTOS tipo . PONTO_VIRGULA
+    (28) comando_writeln -> WRITELN PARENT_A . argumentos PARENT_F
+    (51) argumentos -> . expressao
+    (52) argumentos -> . argumentos VIRGULA expressao
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
-    PONTO_VIRGULA   shift and go to state 72
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
+    argumentos                     shift and go to state 76
+    expressao                      shift and go to state 77
+    termo                          shift and go to state 39
 
 state 50
+
+    (29) comando_readln -> READLN PARENT_A . ID PARENT_F
+
+    ID              shift and go to state 78
+
+
+state 51
+
+    (7) var -> id_list DOIS_PONTOS tipo . PONTO_VIRGULA
+
+    PONTO_VIRGULA   shift and go to state 79
+
+
+state 52
 
     (10) tipo -> INTEGER .
 
     PONTO_VIRGULA   reduce using rule 10 (tipo -> INTEGER .)
 
 
-state 51
+state 53
 
     (11) tipo -> STRING .
 
     PONTO_VIRGULA   reduce using rule 11 (tipo -> STRING .)
 
 
-state 52
+state 54
 
     (12) tipo -> BOOLEAN .
 
     PONTO_VIRGULA   reduce using rule 12 (tipo -> BOOLEAN .)
 
 
-state 53
+state 55
 
     (9) id_list -> id_list VIRGULA ID .
 
@@ -854,22 +1014,23 @@ state 53
     VIRGULA         reduce using rule 9 (id_list -> id_list VIRGULA ID .)
 
 
-state 54
+state 56
 
-    (29) comando_begin -> BEGIN codigo END .
+    (30) comando_begin -> BEGIN codigo END .
 
-    END             reduce using rule 29 (comando_begin -> BEGIN codigo END .)
-    PONTO_VIRGULA   reduce using rule 29 (comando_begin -> BEGIN codigo END .)
+    END             reduce using rule 30 (comando_begin -> BEGIN codigo END .)
+    PONTO_VIRGULA   reduce using rule 30 (comando_begin -> BEGIN codigo END .)
+    ELSE            reduce using rule 30 (comando_begin -> BEGIN codigo END .)
 
 
-state 55
+state 57
 
     (2) resto -> vars BEGIN codigo END PONTO .
 
     $end            reduce using rule 2 (resto -> vars BEGIN codigo END PONTO .)
 
 
-state 56
+state 58
 
     (14) codigo -> codigo PONTO_VIRGULA comando_lista .
 
@@ -877,29 +1038,40 @@ state 56
     PONTO_VIRGULA   reduce using rule 14 (codigo -> codigo PONTO_VIRGULA comando_lista .)
 
 
-state 57
+state 59
 
     (23) comando_assign -> ID ASSIGN expressao .
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
 
     END             reduce using rule 23 (comando_assign -> ID ASSIGN expressao .)
     PONTO_VIRGULA   reduce using rule 23 (comando_assign -> ID ASSIGN expressao .)
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
+    ELSE            reduce using rule 23 (comando_assign -> ID ASSIGN expressao .)
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
 
-    BOOL                           shift and go to state 63
+    BOOL                           shift and go to state 70
 
-state 58
+state 60
 
     (24) comando_while -> WHILE expressao DO . comando_lista
     (15) comando_lista -> . comando_assign
@@ -914,10 +1086,11 @@ state 58
     (24) comando_while -> . WHILE expressao DO comando_lista
     (25) comando_for -> . FOR ID ASSIGN expressao TO expressao DO comando_lista
     (26) comando_if -> . IF expressao THEN comando_lista
-    (27) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
-    (28) comando_readln -> . READLN PARENT_A ID PARENT_F
-    (29) comando_begin -> . BEGIN codigo END
-    (45) empty -> .
+    (27) comando_if -> . IF expressao THEN comando_lista ELSE comando_lista
+    (28) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
+    (29) comando_readln -> . READLN PARENT_A ID PARENT_F
+    (30) comando_begin -> . BEGIN codigo END
+    (53) empty -> .
 
     ID              shift and go to state 25
     WHILE           shift and go to state 26
@@ -926,10 +1099,11 @@ state 58
     WRITELN         shift and go to state 29
     READLN          shift and go to state 30
     BEGIN           shift and go to state 14
-    END             reduce using rule 45 (empty -> .)
-    PONTO_VIRGULA   reduce using rule 45 (empty -> .)
+    END             reduce using rule 53 (empty -> .)
+    PONTO_VIRGULA   reduce using rule 53 (empty -> .)
+    ELSE            reduce using rule 53 (empty -> .)
 
-    comando_lista                  shift and go to state 73
+    comando_lista                  shift and go to state 80
     comando_assign                 shift and go to state 17
     comando_while                  shift and go to state 18
     comando_for                    shift and go to state 19
@@ -939,179 +1113,374 @@ state 58
     comando_begin                  shift and go to state 23
     empty                          shift and go to state 24
 
-state 59
-
-    (31) expressao -> expressao PLUS . termo
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
-
-    NUM_INT         shift and go to state 40
-    NUM_REAL        shift and go to state 41
-    ID              shift and go to state 42
-    LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
-
-    termo                          shift and go to state 74
-
-state 60
-
-    (32) expressao -> expressao MINUS . termo
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
-
-    NUM_INT         shift and go to state 40
-    NUM_REAL        shift and go to state 41
-    ID              shift and go to state 42
-    LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
-
-    termo                          shift and go to state 75
-
 state 61
 
-    (33) expressao -> expressao TIMES . termo
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (32) expressao -> expressao PLUS . termo
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
-    termo                          shift and go to state 76
+    termo                          shift and go to state 81
 
 state 62
 
-    (34) expressao -> expressao DIVIDE . termo
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (33) expressao -> expressao MINUS . termo
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
-    termo                          shift and go to state 77
+    termo                          shift and go to state 82
 
 state 63
 
-    (35) expressao -> expressao BOOL .
-
-    DO              reduce using rule 35 (expressao -> expressao BOOL .)
-    PLUS            reduce using rule 35 (expressao -> expressao BOOL .)
-    MINUS           reduce using rule 35 (expressao -> expressao BOOL .)
-    TIMES           reduce using rule 35 (expressao -> expressao BOOL .)
-    DIVIDE          reduce using rule 35 (expressao -> expressao BOOL .)
-    TRUE            reduce using rule 35 (expressao -> expressao BOOL .)
-    FALSE           reduce using rule 35 (expressao -> expressao BOOL .)
-    THEN            reduce using rule 35 (expressao -> expressao BOOL .)
-    END             reduce using rule 35 (expressao -> expressao BOOL .)
-    PONTO_VIRGULA   reduce using rule 35 (expressao -> expressao BOOL .)
-    PARENT_F        reduce using rule 35 (expressao -> expressao BOOL .)
-    VIRGULA         reduce using rule 35 (expressao -> expressao BOOL .)
-    TO              reduce using rule 35 (expressao -> expressao BOOL .)
-
-
-state 64
-
-    (36) BOOL -> TRUE .
-
-    DO              reduce using rule 36 (BOOL -> TRUE .)
-    PLUS            reduce using rule 36 (BOOL -> TRUE .)
-    MINUS           reduce using rule 36 (BOOL -> TRUE .)
-    TIMES           reduce using rule 36 (BOOL -> TRUE .)
-    DIVIDE          reduce using rule 36 (BOOL -> TRUE .)
-    TRUE            reduce using rule 36 (BOOL -> TRUE .)
-    FALSE           reduce using rule 36 (BOOL -> TRUE .)
-    THEN            reduce using rule 36 (BOOL -> TRUE .)
-    END             reduce using rule 36 (BOOL -> TRUE .)
-    PONTO_VIRGULA   reduce using rule 36 (BOOL -> TRUE .)
-    PARENT_F        reduce using rule 36 (BOOL -> TRUE .)
-    VIRGULA         reduce using rule 36 (BOOL -> TRUE .)
-    TO              reduce using rule 36 (BOOL -> TRUE .)
-
-
-state 65
-
-    (37) BOOL -> FALSE .
-
-    DO              reduce using rule 37 (BOOL -> FALSE .)
-    PLUS            reduce using rule 37 (BOOL -> FALSE .)
-    MINUS           reduce using rule 37 (BOOL -> FALSE .)
-    TIMES           reduce using rule 37 (BOOL -> FALSE .)
-    DIVIDE          reduce using rule 37 (BOOL -> FALSE .)
-    TRUE            reduce using rule 37 (BOOL -> FALSE .)
-    FALSE           reduce using rule 37 (BOOL -> FALSE .)
-    THEN            reduce using rule 37 (BOOL -> FALSE .)
-    END             reduce using rule 37 (BOOL -> FALSE .)
-    PONTO_VIRGULA   reduce using rule 37 (BOOL -> FALSE .)
-    PARENT_F        reduce using rule 37 (BOOL -> FALSE .)
-    VIRGULA         reduce using rule 37 (BOOL -> FALSE .)
-    TO              reduce using rule 37 (BOOL -> FALSE .)
-
-
-state 66
-
-    (42) termo -> PARENT_A expressao . PARENT_F
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
-
-    PARENT_F        shift and go to state 78
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
-
-    BOOL                           shift and go to state 63
-
-state 67
-
-    (25) comando_for -> FOR ID ASSIGN . expressao TO expressao DO comando_lista
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (34) expressao -> expressao TIMES . termo
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
-    expressao                      shift and go to state 79
+    termo                          shift and go to state 83
+
+state 64
+
+    (35) expressao -> expressao DIVIDE . termo
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    termo                          shift and go to state 84
+
+state 65
+
+    (36) expressao -> expressao DIV . termo
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    termo                          shift and go to state 85
+
+state 66
+
+    (37) expressao -> expressao MOD . termo
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    termo                          shift and go to state 86
+
+state 67
+
+    (38) expressao -> expressao AND . expressao
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    expressao                      shift and go to state 87
     termo                          shift and go to state 39
 
 state 68
 
+    (39) expressao -> expressao EQUAL . expressao
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    expressao                      shift and go to state 88
+    termo                          shift and go to state 39
+
+state 69
+
+    (40) expressao -> expressao MENOR_IGUAL . expressao
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    expressao                      shift and go to state 89
+    termo                          shift and go to state 39
+
+state 70
+
+    (41) expressao -> expressao BOOL .
+
+    DO              reduce using rule 41 (expressao -> expressao BOOL .)
+    PLUS            reduce using rule 41 (expressao -> expressao BOOL .)
+    MINUS           reduce using rule 41 (expressao -> expressao BOOL .)
+    TIMES           reduce using rule 41 (expressao -> expressao BOOL .)
+    DIVIDE          reduce using rule 41 (expressao -> expressao BOOL .)
+    DIV             reduce using rule 41 (expressao -> expressao BOOL .)
+    MOD             reduce using rule 41 (expressao -> expressao BOOL .)
+    AND             reduce using rule 41 (expressao -> expressao BOOL .)
+    EQUAL           reduce using rule 41 (expressao -> expressao BOOL .)
+    MENOR_IGUAL     reduce using rule 41 (expressao -> expressao BOOL .)
+    TRUE            reduce using rule 41 (expressao -> expressao BOOL .)
+    FALSE           reduce using rule 41 (expressao -> expressao BOOL .)
+    THEN            reduce using rule 41 (expressao -> expressao BOOL .)
+    END             reduce using rule 41 (expressao -> expressao BOOL .)
+    PONTO_VIRGULA   reduce using rule 41 (expressao -> expressao BOOL .)
+    ELSE            reduce using rule 41 (expressao -> expressao BOOL .)
+    PARENT_F        reduce using rule 41 (expressao -> expressao BOOL .)
+    VIRGULA         reduce using rule 41 (expressao -> expressao BOOL .)
+    TO              reduce using rule 41 (expressao -> expressao BOOL .)
+
+
+state 71
+
+    (42) BOOL -> TRUE .
+
+    DO              reduce using rule 42 (BOOL -> TRUE .)
+    PLUS            reduce using rule 42 (BOOL -> TRUE .)
+    MINUS           reduce using rule 42 (BOOL -> TRUE .)
+    TIMES           reduce using rule 42 (BOOL -> TRUE .)
+    DIVIDE          reduce using rule 42 (BOOL -> TRUE .)
+    DIV             reduce using rule 42 (BOOL -> TRUE .)
+    MOD             reduce using rule 42 (BOOL -> TRUE .)
+    AND             reduce using rule 42 (BOOL -> TRUE .)
+    EQUAL           reduce using rule 42 (BOOL -> TRUE .)
+    MENOR_IGUAL     reduce using rule 42 (BOOL -> TRUE .)
+    TRUE            reduce using rule 42 (BOOL -> TRUE .)
+    FALSE           reduce using rule 42 (BOOL -> TRUE .)
+    THEN            reduce using rule 42 (BOOL -> TRUE .)
+    END             reduce using rule 42 (BOOL -> TRUE .)
+    PONTO_VIRGULA   reduce using rule 42 (BOOL -> TRUE .)
+    ELSE            reduce using rule 42 (BOOL -> TRUE .)
+    PARENT_F        reduce using rule 42 (BOOL -> TRUE .)
+    VIRGULA         reduce using rule 42 (BOOL -> TRUE .)
+    TO              reduce using rule 42 (BOOL -> TRUE .)
+
+
+state 72
+
+    (43) BOOL -> FALSE .
+
+    DO              reduce using rule 43 (BOOL -> FALSE .)
+    PLUS            reduce using rule 43 (BOOL -> FALSE .)
+    MINUS           reduce using rule 43 (BOOL -> FALSE .)
+    TIMES           reduce using rule 43 (BOOL -> FALSE .)
+    DIVIDE          reduce using rule 43 (BOOL -> FALSE .)
+    DIV             reduce using rule 43 (BOOL -> FALSE .)
+    MOD             reduce using rule 43 (BOOL -> FALSE .)
+    AND             reduce using rule 43 (BOOL -> FALSE .)
+    EQUAL           reduce using rule 43 (BOOL -> FALSE .)
+    MENOR_IGUAL     reduce using rule 43 (BOOL -> FALSE .)
+    TRUE            reduce using rule 43 (BOOL -> FALSE .)
+    FALSE           reduce using rule 43 (BOOL -> FALSE .)
+    THEN            reduce using rule 43 (BOOL -> FALSE .)
+    END             reduce using rule 43 (BOOL -> FALSE .)
+    PONTO_VIRGULA   reduce using rule 43 (BOOL -> FALSE .)
+    ELSE            reduce using rule 43 (BOOL -> FALSE .)
+    PARENT_F        reduce using rule 43 (BOOL -> FALSE .)
+    VIRGULA         reduce using rule 43 (BOOL -> FALSE .)
+    TO              reduce using rule 43 (BOOL -> FALSE .)
+
+
+state 73
+
+    (50) termo -> PARENT_A expressao . PARENT_F
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
+
+    PARENT_F        shift and go to state 90
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
+
+    BOOL                           shift and go to state 70
+
+state 74
+
+    (25) comando_for -> FOR ID ASSIGN . expressao TO expressao DO comando_lista
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    expressao                      shift and go to state 91
+    termo                          shift and go to state 39
+
+state 75
+
     (26) comando_if -> IF expressao THEN . comando_lista
+    (27) comando_if -> IF expressao THEN . comando_lista ELSE comando_lista
     (15) comando_lista -> . comando_assign
     (16) comando_lista -> . comando_while
     (17) comando_lista -> . comando_for
@@ -1124,10 +1493,11 @@ state 68
     (24) comando_while -> . WHILE expressao DO comando_lista
     (25) comando_for -> . FOR ID ASSIGN expressao TO expressao DO comando_lista
     (26) comando_if -> . IF expressao THEN comando_lista
-    (27) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
-    (28) comando_readln -> . READLN PARENT_A ID PARENT_F
-    (29) comando_begin -> . BEGIN codigo END
-    (45) empty -> .
+    (27) comando_if -> . IF expressao THEN comando_lista ELSE comando_lista
+    (28) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
+    (29) comando_readln -> . READLN PARENT_A ID PARENT_F
+    (30) comando_begin -> . BEGIN codigo END
+    (53) empty -> .
 
     ID              shift and go to state 25
     WHILE           shift and go to state 26
@@ -1136,10 +1506,11 @@ state 68
     WRITELN         shift and go to state 29
     READLN          shift and go to state 30
     BEGIN           shift and go to state 14
-    END             reduce using rule 45 (empty -> .)
-    PONTO_VIRGULA   reduce using rule 45 (empty -> .)
+    END             reduce using rule 53 (empty -> .)
+    PONTO_VIRGULA   reduce using rule 53 (empty -> .)
+    ELSE            reduce using rule 53 (empty -> .)
 
-    comando_lista                  shift and go to state 80
+    comando_lista                  shift and go to state 92
     comando_assign                 shift and go to state 17
     comando_while                  shift and go to state 18
     comando_for                    shift and go to state 19
@@ -1149,45 +1520,55 @@ state 68
     comando_begin                  shift and go to state 23
     empty                          shift and go to state 24
 
-state 69
+state 76
 
-    (27) comando_writeln -> WRITELN PARENT_A argumentos . PARENT_F
-    (44) argumentos -> argumentos . VIRGULA expressao
+    (28) comando_writeln -> WRITELN PARENT_A argumentos . PARENT_F
+    (52) argumentos -> argumentos . VIRGULA expressao
 
-    PARENT_F        shift and go to state 81
-    VIRGULA         shift and go to state 82
-
-
-state 70
-
-    (43) argumentos -> expressao .
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
-
-    PARENT_F        reduce using rule 43 (argumentos -> expressao .)
-    VIRGULA         reduce using rule 43 (argumentos -> expressao .)
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
-
-    BOOL                           shift and go to state 63
-
-state 71
-
-    (28) comando_readln -> READLN PARENT_A ID . PARENT_F
-
-    PARENT_F        shift and go to state 83
+    PARENT_F        shift and go to state 93
+    VIRGULA         shift and go to state 94
 
 
-state 72
+state 77
+
+    (51) argumentos -> expressao .
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
+
+    PARENT_F        reduce using rule 51 (argumentos -> expressao .)
+    VIRGULA         reduce using rule 51 (argumentos -> expressao .)
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
+
+    BOOL                           shift and go to state 70
+
+state 78
+
+    (29) comando_readln -> READLN PARENT_A ID . PARENT_F
+
+    PARENT_F        shift and go to state 95
+
+
+state 79
 
     (7) var -> id_list DOIS_PONTOS tipo PONTO_VIRGULA .
 
@@ -1195,246 +1576,583 @@ state 72
     BEGIN           reduce using rule 7 (var -> id_list DOIS_PONTOS tipo PONTO_VIRGULA .)
 
 
-state 73
+state 80
 
     (24) comando_while -> WHILE expressao DO comando_lista .
 
     END             reduce using rule 24 (comando_while -> WHILE expressao DO comando_lista .)
     PONTO_VIRGULA   reduce using rule 24 (comando_while -> WHILE expressao DO comando_lista .)
-
-
-state 74
-
-    (31) expressao -> expressao PLUS termo .
-
-    DO              reduce using rule 31 (expressao -> expressao PLUS termo .)
-    PLUS            reduce using rule 31 (expressao -> expressao PLUS termo .)
-    MINUS           reduce using rule 31 (expressao -> expressao PLUS termo .)
-    TIMES           reduce using rule 31 (expressao -> expressao PLUS termo .)
-    DIVIDE          reduce using rule 31 (expressao -> expressao PLUS termo .)
-    TRUE            reduce using rule 31 (expressao -> expressao PLUS termo .)
-    FALSE           reduce using rule 31 (expressao -> expressao PLUS termo .)
-    THEN            reduce using rule 31 (expressao -> expressao PLUS termo .)
-    END             reduce using rule 31 (expressao -> expressao PLUS termo .)
-    PONTO_VIRGULA   reduce using rule 31 (expressao -> expressao PLUS termo .)
-    PARENT_F        reduce using rule 31 (expressao -> expressao PLUS termo .)
-    VIRGULA         reduce using rule 31 (expressao -> expressao PLUS termo .)
-    TO              reduce using rule 31 (expressao -> expressao PLUS termo .)
-
-
-state 75
-
-    (32) expressao -> expressao MINUS termo .
-
-    DO              reduce using rule 32 (expressao -> expressao MINUS termo .)
-    PLUS            reduce using rule 32 (expressao -> expressao MINUS termo .)
-    MINUS           reduce using rule 32 (expressao -> expressao MINUS termo .)
-    TIMES           reduce using rule 32 (expressao -> expressao MINUS termo .)
-    DIVIDE          reduce using rule 32 (expressao -> expressao MINUS termo .)
-    TRUE            reduce using rule 32 (expressao -> expressao MINUS termo .)
-    FALSE           reduce using rule 32 (expressao -> expressao MINUS termo .)
-    THEN            reduce using rule 32 (expressao -> expressao MINUS termo .)
-    END             reduce using rule 32 (expressao -> expressao MINUS termo .)
-    PONTO_VIRGULA   reduce using rule 32 (expressao -> expressao MINUS termo .)
-    PARENT_F        reduce using rule 32 (expressao -> expressao MINUS termo .)
-    VIRGULA         reduce using rule 32 (expressao -> expressao MINUS termo .)
-    TO              reduce using rule 32 (expressao -> expressao MINUS termo .)
-
-
-state 76
-
-    (33) expressao -> expressao TIMES termo .
-
-    DO              reduce using rule 33 (expressao -> expressao TIMES termo .)
-    PLUS            reduce using rule 33 (expressao -> expressao TIMES termo .)
-    MINUS           reduce using rule 33 (expressao -> expressao TIMES termo .)
-    TIMES           reduce using rule 33 (expressao -> expressao TIMES termo .)
-    DIVIDE          reduce using rule 33 (expressao -> expressao TIMES termo .)
-    TRUE            reduce using rule 33 (expressao -> expressao TIMES termo .)
-    FALSE           reduce using rule 33 (expressao -> expressao TIMES termo .)
-    THEN            reduce using rule 33 (expressao -> expressao TIMES termo .)
-    END             reduce using rule 33 (expressao -> expressao TIMES termo .)
-    PONTO_VIRGULA   reduce using rule 33 (expressao -> expressao TIMES termo .)
-    PARENT_F        reduce using rule 33 (expressao -> expressao TIMES termo .)
-    VIRGULA         reduce using rule 33 (expressao -> expressao TIMES termo .)
-    TO              reduce using rule 33 (expressao -> expressao TIMES termo .)
-
-
-state 77
-
-    (34) expressao -> expressao DIVIDE termo .
-
-    DO              reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    PLUS            reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    MINUS           reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    TIMES           reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    DIVIDE          reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    TRUE            reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    FALSE           reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    THEN            reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    END             reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    PONTO_VIRGULA   reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    PARENT_F        reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    VIRGULA         reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-    TO              reduce using rule 34 (expressao -> expressao DIVIDE termo .)
-
-
-state 78
-
-    (42) termo -> PARENT_A expressao PARENT_F .
-
-    DO              reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    PLUS            reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    MINUS           reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    TIMES           reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    DIVIDE          reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    TRUE            reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    FALSE           reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    THEN            reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    END             reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    PONTO_VIRGULA   reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    PARENT_F        reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    VIRGULA         reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-    TO              reduce using rule 42 (termo -> PARENT_A expressao PARENT_F .)
-
-
-state 79
-
-    (25) comando_for -> FOR ID ASSIGN expressao . TO expressao DO comando_lista
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
-
-    TO              shift and go to state 84
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
-
-    BOOL                           shift and go to state 63
-
-state 80
-
-    (26) comando_if -> IF expressao THEN comando_lista .
-
-    END             reduce using rule 26 (comando_if -> IF expressao THEN comando_lista .)
-    PONTO_VIRGULA   reduce using rule 26 (comando_if -> IF expressao THEN comando_lista .)
+    ELSE            reduce using rule 24 (comando_while -> WHILE expressao DO comando_lista .)
 
 
 state 81
 
-    (27) comando_writeln -> WRITELN PARENT_A argumentos PARENT_F .
+    (32) expressao -> expressao PLUS termo .
 
-    END             reduce using rule 27 (comando_writeln -> WRITELN PARENT_A argumentos PARENT_F .)
-    PONTO_VIRGULA   reduce using rule 27 (comando_writeln -> WRITELN PARENT_A argumentos PARENT_F .)
+    DO              reduce using rule 32 (expressao -> expressao PLUS termo .)
+    PLUS            reduce using rule 32 (expressao -> expressao PLUS termo .)
+    MINUS           reduce using rule 32 (expressao -> expressao PLUS termo .)
+    TIMES           reduce using rule 32 (expressao -> expressao PLUS termo .)
+    DIVIDE          reduce using rule 32 (expressao -> expressao PLUS termo .)
+    DIV             reduce using rule 32 (expressao -> expressao PLUS termo .)
+    MOD             reduce using rule 32 (expressao -> expressao PLUS termo .)
+    AND             reduce using rule 32 (expressao -> expressao PLUS termo .)
+    EQUAL           reduce using rule 32 (expressao -> expressao PLUS termo .)
+    MENOR_IGUAL     reduce using rule 32 (expressao -> expressao PLUS termo .)
+    TRUE            reduce using rule 32 (expressao -> expressao PLUS termo .)
+    FALSE           reduce using rule 32 (expressao -> expressao PLUS termo .)
+    THEN            reduce using rule 32 (expressao -> expressao PLUS termo .)
+    END             reduce using rule 32 (expressao -> expressao PLUS termo .)
+    PONTO_VIRGULA   reduce using rule 32 (expressao -> expressao PLUS termo .)
+    ELSE            reduce using rule 32 (expressao -> expressao PLUS termo .)
+    PARENT_F        reduce using rule 32 (expressao -> expressao PLUS termo .)
+    VIRGULA         reduce using rule 32 (expressao -> expressao PLUS termo .)
+    TO              reduce using rule 32 (expressao -> expressao PLUS termo .)
 
 
 state 82
 
-    (44) argumentos -> argumentos VIRGULA . expressao
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (33) expressao -> expressao MINUS termo .
 
-    NUM_INT         shift and go to state 40
-    NUM_REAL        shift and go to state 41
-    ID              shift and go to state 42
-    LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    DO              reduce using rule 33 (expressao -> expressao MINUS termo .)
+    PLUS            reduce using rule 33 (expressao -> expressao MINUS termo .)
+    MINUS           reduce using rule 33 (expressao -> expressao MINUS termo .)
+    TIMES           reduce using rule 33 (expressao -> expressao MINUS termo .)
+    DIVIDE          reduce using rule 33 (expressao -> expressao MINUS termo .)
+    DIV             reduce using rule 33 (expressao -> expressao MINUS termo .)
+    MOD             reduce using rule 33 (expressao -> expressao MINUS termo .)
+    AND             reduce using rule 33 (expressao -> expressao MINUS termo .)
+    EQUAL           reduce using rule 33 (expressao -> expressao MINUS termo .)
+    MENOR_IGUAL     reduce using rule 33 (expressao -> expressao MINUS termo .)
+    TRUE            reduce using rule 33 (expressao -> expressao MINUS termo .)
+    FALSE           reduce using rule 33 (expressao -> expressao MINUS termo .)
+    THEN            reduce using rule 33 (expressao -> expressao MINUS termo .)
+    END             reduce using rule 33 (expressao -> expressao MINUS termo .)
+    PONTO_VIRGULA   reduce using rule 33 (expressao -> expressao MINUS termo .)
+    ELSE            reduce using rule 33 (expressao -> expressao MINUS termo .)
+    PARENT_F        reduce using rule 33 (expressao -> expressao MINUS termo .)
+    VIRGULA         reduce using rule 33 (expressao -> expressao MINUS termo .)
+    TO              reduce using rule 33 (expressao -> expressao MINUS termo .)
 
-    expressao                      shift and go to state 85
-    termo                          shift and go to state 39
 
 state 83
 
-    (28) comando_readln -> READLN PARENT_A ID PARENT_F .
+    (34) expressao -> expressao TIMES termo .
 
-    END             reduce using rule 28 (comando_readln -> READLN PARENT_A ID PARENT_F .)
-    PONTO_VIRGULA   reduce using rule 28 (comando_readln -> READLN PARENT_A ID PARENT_F .)
+    DO              reduce using rule 34 (expressao -> expressao TIMES termo .)
+    PLUS            reduce using rule 34 (expressao -> expressao TIMES termo .)
+    MINUS           reduce using rule 34 (expressao -> expressao TIMES termo .)
+    TIMES           reduce using rule 34 (expressao -> expressao TIMES termo .)
+    DIVIDE          reduce using rule 34 (expressao -> expressao TIMES termo .)
+    DIV             reduce using rule 34 (expressao -> expressao TIMES termo .)
+    MOD             reduce using rule 34 (expressao -> expressao TIMES termo .)
+    AND             reduce using rule 34 (expressao -> expressao TIMES termo .)
+    EQUAL           reduce using rule 34 (expressao -> expressao TIMES termo .)
+    MENOR_IGUAL     reduce using rule 34 (expressao -> expressao TIMES termo .)
+    TRUE            reduce using rule 34 (expressao -> expressao TIMES termo .)
+    FALSE           reduce using rule 34 (expressao -> expressao TIMES termo .)
+    THEN            reduce using rule 34 (expressao -> expressao TIMES termo .)
+    END             reduce using rule 34 (expressao -> expressao TIMES termo .)
+    PONTO_VIRGULA   reduce using rule 34 (expressao -> expressao TIMES termo .)
+    ELSE            reduce using rule 34 (expressao -> expressao TIMES termo .)
+    PARENT_F        reduce using rule 34 (expressao -> expressao TIMES termo .)
+    VIRGULA         reduce using rule 34 (expressao -> expressao TIMES termo .)
+    TO              reduce using rule 34 (expressao -> expressao TIMES termo .)
 
 
 state 84
 
-    (25) comando_for -> FOR ID ASSIGN expressao TO . expressao DO comando_lista
-    (30) expressao -> . termo
-    (31) expressao -> . expressao PLUS termo
-    (32) expressao -> . expressao MINUS termo
-    (33) expressao -> . expressao TIMES termo
-    (34) expressao -> . expressao DIVIDE termo
-    (35) expressao -> . expressao BOOL
-    (38) termo -> . NUM_INT
-    (39) termo -> . NUM_REAL
-    (40) termo -> . ID
-    (41) termo -> . LIT_STRING
-    (42) termo -> . PARENT_A expressao PARENT_F
+    (35) expressao -> expressao DIVIDE termo .
+
+    DO              reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    PLUS            reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    MINUS           reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    TIMES           reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    DIVIDE          reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    DIV             reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    MOD             reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    AND             reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    EQUAL           reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    MENOR_IGUAL     reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    TRUE            reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    FALSE           reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    THEN            reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    END             reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    PONTO_VIRGULA   reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    ELSE            reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    PARENT_F        reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    VIRGULA         reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+    TO              reduce using rule 35 (expressao -> expressao DIVIDE termo .)
+
+
+state 85
+
+    (36) expressao -> expressao DIV termo .
+
+    DO              reduce using rule 36 (expressao -> expressao DIV termo .)
+    PLUS            reduce using rule 36 (expressao -> expressao DIV termo .)
+    MINUS           reduce using rule 36 (expressao -> expressao DIV termo .)
+    TIMES           reduce using rule 36 (expressao -> expressao DIV termo .)
+    DIVIDE          reduce using rule 36 (expressao -> expressao DIV termo .)
+    DIV             reduce using rule 36 (expressao -> expressao DIV termo .)
+    MOD             reduce using rule 36 (expressao -> expressao DIV termo .)
+    AND             reduce using rule 36 (expressao -> expressao DIV termo .)
+    EQUAL           reduce using rule 36 (expressao -> expressao DIV termo .)
+    MENOR_IGUAL     reduce using rule 36 (expressao -> expressao DIV termo .)
+    TRUE            reduce using rule 36 (expressao -> expressao DIV termo .)
+    FALSE           reduce using rule 36 (expressao -> expressao DIV termo .)
+    THEN            reduce using rule 36 (expressao -> expressao DIV termo .)
+    END             reduce using rule 36 (expressao -> expressao DIV termo .)
+    PONTO_VIRGULA   reduce using rule 36 (expressao -> expressao DIV termo .)
+    ELSE            reduce using rule 36 (expressao -> expressao DIV termo .)
+    PARENT_F        reduce using rule 36 (expressao -> expressao DIV termo .)
+    VIRGULA         reduce using rule 36 (expressao -> expressao DIV termo .)
+    TO              reduce using rule 36 (expressao -> expressao DIV termo .)
+
+
+state 86
+
+    (37) expressao -> expressao MOD termo .
+
+    DO              reduce using rule 37 (expressao -> expressao MOD termo .)
+    PLUS            reduce using rule 37 (expressao -> expressao MOD termo .)
+    MINUS           reduce using rule 37 (expressao -> expressao MOD termo .)
+    TIMES           reduce using rule 37 (expressao -> expressao MOD termo .)
+    DIVIDE          reduce using rule 37 (expressao -> expressao MOD termo .)
+    DIV             reduce using rule 37 (expressao -> expressao MOD termo .)
+    MOD             reduce using rule 37 (expressao -> expressao MOD termo .)
+    AND             reduce using rule 37 (expressao -> expressao MOD termo .)
+    EQUAL           reduce using rule 37 (expressao -> expressao MOD termo .)
+    MENOR_IGUAL     reduce using rule 37 (expressao -> expressao MOD termo .)
+    TRUE            reduce using rule 37 (expressao -> expressao MOD termo .)
+    FALSE           reduce using rule 37 (expressao -> expressao MOD termo .)
+    THEN            reduce using rule 37 (expressao -> expressao MOD termo .)
+    END             reduce using rule 37 (expressao -> expressao MOD termo .)
+    PONTO_VIRGULA   reduce using rule 37 (expressao -> expressao MOD termo .)
+    ELSE            reduce using rule 37 (expressao -> expressao MOD termo .)
+    PARENT_F        reduce using rule 37 (expressao -> expressao MOD termo .)
+    VIRGULA         reduce using rule 37 (expressao -> expressao MOD termo .)
+    TO              reduce using rule 37 (expressao -> expressao MOD termo .)
+
+
+state 87
+
+    (38) expressao -> expressao AND expressao .
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
+
+    DO              reduce using rule 38 (expressao -> expressao AND expressao .)
+    AND             reduce using rule 38 (expressao -> expressao AND expressao .)
+    TRUE            reduce using rule 38 (expressao -> expressao AND expressao .)
+    FALSE           reduce using rule 38 (expressao -> expressao AND expressao .)
+    THEN            reduce using rule 38 (expressao -> expressao AND expressao .)
+    END             reduce using rule 38 (expressao -> expressao AND expressao .)
+    PONTO_VIRGULA   reduce using rule 38 (expressao -> expressao AND expressao .)
+    ELSE            reduce using rule 38 (expressao -> expressao AND expressao .)
+    PARENT_F        reduce using rule 38 (expressao -> expressao AND expressao .)
+    VIRGULA         reduce using rule 38 (expressao -> expressao AND expressao .)
+    TO              reduce using rule 38 (expressao -> expressao AND expressao .)
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+
+  ! PLUS            [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! MINUS           [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! TIMES           [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! DIVIDE          [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! DIV             [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! MOD             [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! EQUAL           [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! MENOR_IGUAL     [ reduce using rule 38 (expressao -> expressao AND expressao .) ]
+  ! AND             [ shift and go to state 67 ]
+  ! TRUE            [ shift and go to state 71 ]
+  ! FALSE           [ shift and go to state 72 ]
+
+    BOOL                           shift and go to state 70
+
+state 88
+
+    (39) expressao -> expressao EQUAL expressao .
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
+
+    DO              reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    AND             reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    EQUAL           reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    MENOR_IGUAL     reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    TRUE            reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    FALSE           reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    THEN            reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    END             reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    PONTO_VIRGULA   reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    ELSE            reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    PARENT_F        reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    VIRGULA         reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    TO              reduce using rule 39 (expressao -> expressao EQUAL expressao .)
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+
+  ! PLUS            [ reduce using rule 39 (expressao -> expressao EQUAL expressao .) ]
+  ! MINUS           [ reduce using rule 39 (expressao -> expressao EQUAL expressao .) ]
+  ! TIMES           [ reduce using rule 39 (expressao -> expressao EQUAL expressao .) ]
+  ! DIVIDE          [ reduce using rule 39 (expressao -> expressao EQUAL expressao .) ]
+  ! DIV             [ reduce using rule 39 (expressao -> expressao EQUAL expressao .) ]
+  ! MOD             [ reduce using rule 39 (expressao -> expressao EQUAL expressao .) ]
+  ! AND             [ shift and go to state 67 ]
+  ! EQUAL           [ shift and go to state 68 ]
+  ! MENOR_IGUAL     [ shift and go to state 69 ]
+  ! TRUE            [ shift and go to state 71 ]
+  ! FALSE           [ shift and go to state 72 ]
+
+    BOOL                           shift and go to state 70
+
+state 89
+
+    (40) expressao -> expressao MENOR_IGUAL expressao .
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
+
+    DO              reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    AND             reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    EQUAL           reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    MENOR_IGUAL     reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    TRUE            reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    FALSE           reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    THEN            reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    END             reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    PONTO_VIRGULA   reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    ELSE            reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    PARENT_F        reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    VIRGULA         reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    TO              reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .)
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+
+  ! PLUS            [ reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .) ]
+  ! MINUS           [ reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .) ]
+  ! TIMES           [ reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .) ]
+  ! DIVIDE          [ reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .) ]
+  ! DIV             [ reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .) ]
+  ! MOD             [ reduce using rule 40 (expressao -> expressao MENOR_IGUAL expressao .) ]
+  ! AND             [ shift and go to state 67 ]
+  ! EQUAL           [ shift and go to state 68 ]
+  ! MENOR_IGUAL     [ shift and go to state 69 ]
+  ! TRUE            [ shift and go to state 71 ]
+  ! FALSE           [ shift and go to state 72 ]
+
+    BOOL                           shift and go to state 70
+
+state 90
+
+    (50) termo -> PARENT_A expressao PARENT_F .
+
+    DO              reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    PLUS            reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    MINUS           reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    TIMES           reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    DIVIDE          reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    DIV             reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    MOD             reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    AND             reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    EQUAL           reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    MENOR_IGUAL     reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    TRUE            reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    FALSE           reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    THEN            reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    END             reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    PONTO_VIRGULA   reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    ELSE            reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    PARENT_F        reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    VIRGULA         reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+    TO              reduce using rule 50 (termo -> PARENT_A expressao PARENT_F .)
+
+
+state 91
+
+    (25) comando_for -> FOR ID ASSIGN expressao . TO expressao DO comando_lista
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
+
+    TO              shift and go to state 96
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
+
+    BOOL                           shift and go to state 70
+
+state 92
+
+    (26) comando_if -> IF expressao THEN comando_lista .
+    (27) comando_if -> IF expressao THEN comando_lista . ELSE comando_lista
+
+  ! shift/reduce conflict for ELSE resolved as shift
+    END             reduce using rule 26 (comando_if -> IF expressao THEN comando_lista .)
+    PONTO_VIRGULA   reduce using rule 26 (comando_if -> IF expressao THEN comando_lista .)
+    ELSE            shift and go to state 97
+
+  ! ELSE            [ reduce using rule 26 (comando_if -> IF expressao THEN comando_lista .) ]
+
+
+state 93
+
+    (28) comando_writeln -> WRITELN PARENT_A argumentos PARENT_F .
+
+    END             reduce using rule 28 (comando_writeln -> WRITELN PARENT_A argumentos PARENT_F .)
+    PONTO_VIRGULA   reduce using rule 28 (comando_writeln -> WRITELN PARENT_A argumentos PARENT_F .)
+    ELSE            reduce using rule 28 (comando_writeln -> WRITELN PARENT_A argumentos PARENT_F .)
+
+
+state 94
+
+    (52) argumentos -> argumentos VIRGULA . expressao
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
 
     NUM_INT         shift and go to state 40
     NUM_REAL        shift and go to state 41
     ID              shift and go to state 42
     LIT_STRING      shift and go to state 43
-    PARENT_A        shift and go to state 44
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
 
-    expressao                      shift and go to state 86
+    expressao                      shift and go to state 98
     termo                          shift and go to state 39
 
-state 85
+state 95
 
-    (44) argumentos -> argumentos VIRGULA expressao .
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
+    (29) comando_readln -> READLN PARENT_A ID PARENT_F .
 
-    PARENT_F        reduce using rule 44 (argumentos -> argumentos VIRGULA expressao .)
-    VIRGULA         reduce using rule 44 (argumentos -> argumentos VIRGULA expressao .)
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
+    END             reduce using rule 29 (comando_readln -> READLN PARENT_A ID PARENT_F .)
+    PONTO_VIRGULA   reduce using rule 29 (comando_readln -> READLN PARENT_A ID PARENT_F .)
+    ELSE            reduce using rule 29 (comando_readln -> READLN PARENT_A ID PARENT_F .)
 
-    BOOL                           shift and go to state 63
 
-state 86
+state 96
+
+    (25) comando_for -> FOR ID ASSIGN expressao TO . expressao DO comando_lista
+    (31) expressao -> . termo
+    (32) expressao -> . expressao PLUS termo
+    (33) expressao -> . expressao MINUS termo
+    (34) expressao -> . expressao TIMES termo
+    (35) expressao -> . expressao DIVIDE termo
+    (36) expressao -> . expressao DIV termo
+    (37) expressao -> . expressao MOD termo
+    (38) expressao -> . expressao AND expressao
+    (39) expressao -> . expressao EQUAL expressao
+    (40) expressao -> . expressao MENOR_IGUAL expressao
+    (41) expressao -> . expressao BOOL
+    (44) termo -> . NUM_INT
+    (45) termo -> . NUM_REAL
+    (46) termo -> . ID
+    (47) termo -> . LIT_STRING
+    (48) termo -> . TRUE
+    (49) termo -> . FALSE
+    (50) termo -> . PARENT_A expressao PARENT_F
+
+    NUM_INT         shift and go to state 40
+    NUM_REAL        shift and go to state 41
+    ID              shift and go to state 42
+    LIT_STRING      shift and go to state 43
+    TRUE            shift and go to state 44
+    FALSE           shift and go to state 45
+    PARENT_A        shift and go to state 46
+
+    expressao                      shift and go to state 99
+    termo                          shift and go to state 39
+
+state 97
+
+    (27) comando_if -> IF expressao THEN comando_lista ELSE . comando_lista
+    (15) comando_lista -> . comando_assign
+    (16) comando_lista -> . comando_while
+    (17) comando_lista -> . comando_for
+    (18) comando_lista -> . comando_if
+    (19) comando_lista -> . comando_writeln
+    (20) comando_lista -> . comando_readln
+    (21) comando_lista -> . comando_begin
+    (22) comando_lista -> . empty
+    (23) comando_assign -> . ID ASSIGN expressao
+    (24) comando_while -> . WHILE expressao DO comando_lista
+    (25) comando_for -> . FOR ID ASSIGN expressao TO expressao DO comando_lista
+    (26) comando_if -> . IF expressao THEN comando_lista
+    (27) comando_if -> . IF expressao THEN comando_lista ELSE comando_lista
+    (28) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
+    (29) comando_readln -> . READLN PARENT_A ID PARENT_F
+    (30) comando_begin -> . BEGIN codigo END
+    (53) empty -> .
+
+    ID              shift and go to state 25
+    WHILE           shift and go to state 26
+    FOR             shift and go to state 27
+    IF              shift and go to state 28
+    WRITELN         shift and go to state 29
+    READLN          shift and go to state 30
+    BEGIN           shift and go to state 14
+    END             reduce using rule 53 (empty -> .)
+    PONTO_VIRGULA   reduce using rule 53 (empty -> .)
+    ELSE            reduce using rule 53 (empty -> .)
+
+    comando_lista                  shift and go to state 100
+    comando_assign                 shift and go to state 17
+    comando_while                  shift and go to state 18
+    comando_for                    shift and go to state 19
+    comando_if                     shift and go to state 20
+    comando_writeln                shift and go to state 21
+    comando_readln                 shift and go to state 22
+    comando_begin                  shift and go to state 23
+    empty                          shift and go to state 24
+
+state 98
+
+    (52) argumentos -> argumentos VIRGULA expressao .
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
+
+    PARENT_F        reduce using rule 52 (argumentos -> argumentos VIRGULA expressao .)
+    VIRGULA         reduce using rule 52 (argumentos -> argumentos VIRGULA expressao .)
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
+
+    BOOL                           shift and go to state 70
+
+state 99
 
     (25) comando_for -> FOR ID ASSIGN expressao TO expressao . DO comando_lista
-    (31) expressao -> expressao . PLUS termo
-    (32) expressao -> expressao . MINUS termo
-    (33) expressao -> expressao . TIMES termo
-    (34) expressao -> expressao . DIVIDE termo
-    (35) expressao -> expressao . BOOL
-    (36) BOOL -> . TRUE
-    (37) BOOL -> . FALSE
+    (32) expressao -> expressao . PLUS termo
+    (33) expressao -> expressao . MINUS termo
+    (34) expressao -> expressao . TIMES termo
+    (35) expressao -> expressao . DIVIDE termo
+    (36) expressao -> expressao . DIV termo
+    (37) expressao -> expressao . MOD termo
+    (38) expressao -> expressao . AND expressao
+    (39) expressao -> expressao . EQUAL expressao
+    (40) expressao -> expressao . MENOR_IGUAL expressao
+    (41) expressao -> expressao . BOOL
+    (42) BOOL -> . TRUE
+    (43) BOOL -> . FALSE
 
-    DO              shift and go to state 87
-    PLUS            shift and go to state 59
-    MINUS           shift and go to state 60
-    TIMES           shift and go to state 61
-    DIVIDE          shift and go to state 62
-    TRUE            shift and go to state 64
-    FALSE           shift and go to state 65
+    DO              shift and go to state 101
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
+    DIV             shift and go to state 65
+    MOD             shift and go to state 66
+    AND             shift and go to state 67
+    EQUAL           shift and go to state 68
+    MENOR_IGUAL     shift and go to state 69
+    TRUE            shift and go to state 71
+    FALSE           shift and go to state 72
 
-    BOOL                           shift and go to state 63
+    BOOL                           shift and go to state 70
 
-state 87
+state 100
+
+    (27) comando_if -> IF expressao THEN comando_lista ELSE comando_lista .
+
+    END             reduce using rule 27 (comando_if -> IF expressao THEN comando_lista ELSE comando_lista .)
+    PONTO_VIRGULA   reduce using rule 27 (comando_if -> IF expressao THEN comando_lista ELSE comando_lista .)
+    ELSE            reduce using rule 27 (comando_if -> IF expressao THEN comando_lista ELSE comando_lista .)
+
+
+state 101
 
     (25) comando_for -> FOR ID ASSIGN expressao TO expressao DO . comando_lista
     (15) comando_lista -> . comando_assign
@@ -1449,10 +2167,11 @@ state 87
     (24) comando_while -> . WHILE expressao DO comando_lista
     (25) comando_for -> . FOR ID ASSIGN expressao TO expressao DO comando_lista
     (26) comando_if -> . IF expressao THEN comando_lista
-    (27) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
-    (28) comando_readln -> . READLN PARENT_A ID PARENT_F
-    (29) comando_begin -> . BEGIN codigo END
-    (45) empty -> .
+    (27) comando_if -> . IF expressao THEN comando_lista ELSE comando_lista
+    (28) comando_writeln -> . WRITELN PARENT_A argumentos PARENT_F
+    (29) comando_readln -> . READLN PARENT_A ID PARENT_F
+    (30) comando_begin -> . BEGIN codigo END
+    (53) empty -> .
 
     ID              shift and go to state 25
     WHILE           shift and go to state 26
@@ -1461,10 +2180,11 @@ state 87
     WRITELN         shift and go to state 29
     READLN          shift and go to state 30
     BEGIN           shift and go to state 14
-    END             reduce using rule 45 (empty -> .)
-    PONTO_VIRGULA   reduce using rule 45 (empty -> .)
+    END             reduce using rule 53 (empty -> .)
+    PONTO_VIRGULA   reduce using rule 53 (empty -> .)
+    ELSE            reduce using rule 53 (empty -> .)
 
-    comando_lista                  shift and go to state 88
+    comando_lista                  shift and go to state 102
     comando_assign                 shift and go to state 17
     comando_while                  shift and go to state 18
     comando_for                    shift and go to state 19
@@ -1474,10 +2194,15 @@ state 87
     comando_begin                  shift and go to state 23
     empty                          shift and go to state 24
 
-state 88
+state 102
 
     (25) comando_for -> FOR ID ASSIGN expressao TO expressao DO comando_lista .
 
     END             reduce using rule 25 (comando_for -> FOR ID ASSIGN expressao TO expressao DO comando_lista .)
     PONTO_VIRGULA   reduce using rule 25 (comando_for -> FOR ID ASSIGN expressao TO expressao DO comando_lista .)
+    ELSE            reduce using rule 25 (comando_for -> FOR ID ASSIGN expressao TO expressao DO comando_lista .)
 
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ELSE in state 92 resolved as shift

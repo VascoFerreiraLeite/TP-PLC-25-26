@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'programleftPLUSMINUSleftTIMESDIVIDEAND APOST ARRAY ASSIGN BEGIN BOOLEAN DIV DIVIDE DO DOIS_PONTOS DOWNTO ELSE END EQUAL FALSE FOR FUNCTION ID IF INTEGER LIT_STRING MAIOR MAIOR_IGUAL MENOR MENOR_IGUAL MINUS MOD NUM_INT NUM_REAL OF PARENT_A PARENT_F PARENT_Q_A PARENT_Q_F PLUS PONTO PONTO_VIRGULA PROGRAM READLN STRING THEN TIMES TO TRUE VAR VIRGULA WHILE WRITELNprogram : PROGRAM ID PONTO_VIRGULA restoresto : vars BEGIN codigo END PONTOvars : VAR var_list\n            | emptyvar_list : var\n                | var_list varvar : id_list DOIS_PONTOS tipo PONTO_VIRGULAid_list : ID\n               | id_list VIRGULA IDtipo : INTEGER\n            | STRING\n            | BOOLEANcodigo : comando_lista\n              | codigo PONTO_VIRGULA comando_listacomando_lista : comando_assign\n                     | comando_while\n                     | comando_for\n                     | comando_if\n                     | comando_writeln\n                     | comando_readln\n                     | comando_begin\n                     | emptycomando_assign : ID ASSIGN expressaocomando_while : WHILE expressao DO comando_listacomando_for : FOR ID ASSIGN expressao TO expressao DO comando_listacomando_if : IF expressao THEN comando_listacomando_writeln : WRITELN PARENT_A argumentos PARENT_Fcomando_readln : READLN PARENT_A ID PARENT_Fcomando_begin : BEGIN codigo ENDexpressao : termo\n                 | expressao PLUS termo\n                 | expressao MINUS termo\n                 | expressao TIMES termo\n                 | expressao DIVIDE termo\n                 | expressao BOOLBOOL : TRUE\n            | FALSEtermo : NUM_INT\n             | NUM_REAL \n             | ID\n             | LIT_STRING\n             | PARENT_A expressao PARENT_Fargumentos : expressao\n                  | argumentos VIRGULA expressaoempty :'
+_lr_signature = 'programleftANDnonassocEQUALMENOR_IGUALleftPLUSMINUSleftTIMESDIVIDEDIVMODAND APOST ARRAY ASSIGN BEGIN BOOLEAN DIV DIVIDE DO DOIS_PONTOS DOWNTO ELSE END EQUAL FALSE FOR FUNCTION ID IF INTEGER LIT_STRING MAIOR MAIOR_IGUAL MENOR MENOR_IGUAL MINUS MOD NUM_INT NUM_REAL OF PARENT_A PARENT_F PARENT_Q_A PARENT_Q_F PLUS PONTO PONTO_VIRGULA PROGRAM READLN STRING THEN TIMES TO TRUE VAR VIRGULA WHILE WRITELNprogram : PROGRAM ID PONTO_VIRGULA restoresto : vars BEGIN codigo END PONTOvars : VAR var_list\n            | emptyvar_list : var\n                | var_list varvar : id_list DOIS_PONTOS tipo PONTO_VIRGULAid_list : ID\n            | id_list VIRGULA IDtipo : INTEGER\n            | STRING\n            | BOOLEANcodigo : comando_lista\n            | codigo PONTO_VIRGULA comando_listacomando_lista : comando_assign\n                    | comando_while\n                    | comando_for\n                    | comando_if\n                    | comando_writeln\n                    | comando_readln\n                    | comando_begin\n                    | emptycomando_assign : ID ASSIGN expressaocomando_while : WHILE expressao DO comando_listacomando_for : FOR ID ASSIGN expressao TO expressao DO comando_listacomando_if : IF expressao THEN comando_lista\n                  | IF expressao THEN comando_lista ELSE comando_listacomando_writeln : WRITELN PARENT_A argumentos PARENT_Fcomando_readln : READLN PARENT_A ID PARENT_Fcomando_begin : BEGIN codigo ENDexpressao : termo\n                | expressao PLUS termo\n                | expressao MINUS termo\n                | expressao TIMES termo\n                | expressao DIVIDE termo\n                | expressao DIV termo           \n                | expressao MOD termo           \n                | expressao AND expressao       \n                | expressao EQUAL expressao     \n                | expressao MENOR_IGUAL expressao\n                | expressao BOOLBOOL : TRUE\n            | FALSEtermo : NUM_INT\n            | NUM_REAL \n            | ID\n            | LIT_STRING\n            | TRUE\n            | FALSE\n            | PARENT_A expressao PARENT_Fargumentos : expressao\n                | argumentos VIRGULA expressaoempty :'
     
-_lr_action_items = {'PROGRAM':([0,],[2,]),'$end':([1,5,55,],[0,-1,-2,]),'ID':([2,7,9,10,11,14,26,27,28,31,33,36,37,44,47,48,58,59,60,61,62,67,68,72,82,84,87,],[3,13,25,13,-5,25,42,45,42,-6,53,25,42,42,42,71,25,42,42,42,42,42,25,-7,42,42,25,]),'PONTO_VIRGULA':([3,9,14,15,16,17,18,19,20,21,22,23,24,34,36,39,40,41,42,43,49,50,51,52,54,56,57,58,63,64,65,68,73,74,75,76,77,78,80,81,83,87,88,],[4,-45,-45,36,-13,-15,-16,-17,-18,-19,-20,-21,-22,36,-45,-30,-38,-39,-40,-41,72,-10,-11,-12,-29,-14,-23,-45,-35,-36,-37,-45,-24,-31,-32,-33,-34,-42,-26,-27,-28,-45,-25,]),'VAR':([4,],[7,]),'BEGIN':([4,6,8,9,10,11,14,31,36,58,68,72,87,],[-45,9,-4,14,-3,-5,14,-6,14,14,14,-7,14,]),'WHILE':([9,14,36,58,68,87,],[26,26,26,26,26,26,]),'FOR':([9,14,36,58,68,87,],[27,27,27,27,27,27,]),'IF':([9,14,36,58,68,87,],[28,28,28,28,28,28,]),'WRITELN':([9,14,36,58,68,87,],[29,29,29,29,29,29,]),'READLN':([9,14,36,58,68,87,],[30,30,30,30,30,30,]),'END':([9,14,15,16,17,18,19,20,21,22,23,24,34,36,39,40,41,42,43,54,56,57,58,63,64,65,68,73,74,75,76,77,78,80,81,83,87,88,],[-45,-45,35,-13,-15,-16,-17,-18,-19,-20,-21,-22,54,-45,-30,-38,-39,-40,-41,-29,-14,-23,-45,-35,-36,-37,-45,-24,-31,-32,-33,-34,-42,-26,-27,-28,-45,-25,]),'DOIS_PONTOS':([12,13,53,],[32,-8,-9,]),'VIRGULA':([12,13,39,40,41,42,43,53,63,64,65,69,70,74,75,76,77,78,85,],[33,-8,-30,-38,-39,-40,-41,-9,-35,-36,-37,82,-43,-31,-32,-33,-34,-42,-44,]),'ASSIGN':([25,45,],[37,67,]),'NUM_INT':([26,28,37,44,47,59,60,61,62,67,82,84,],[40,40,40,40,40,40,40,40,40,40,40,40,]),'NUM_REAL':([26,28,37,44,47,59,60,61,62,67,82,84,],[41,41,41,41,41,41,41,41,41,41,41,41,]),'LIT_STRING':([26,28,37,44,47,59,60,61,62,67,82,84,],[43,43,43,43,43,43,43,43,43,43,43,43,]),'PARENT_A':([26,28,29,30,37,44,47,59,60,61,62,67,82,84,],[44,44,47,48,44,44,44,44,44,44,44,44,44,44,]),'INTEGER':([32,],[50,]),'STRING':([32,],[51,]),'BOOLEAN':([32,],[52,]),'PONTO':([35,],[55,]),'DO':([38,39,40,41,42,43,63,64,65,74,75,76,77,78,86,],[58,-30,-38,-39,-40,-41,-35,-36,-37,-31,-32,-33,-34,-42,87,]),'PLUS':([38,39,40,41,42,43,46,57,63,64,65,66,70,74,75,76,77,78,79,85,86,],[59,-30,-38,-39,-40,-41,59,59,-35,-36,-37,59,59,-31,-32,-33,-34,-42,59,59,59,]),'MINUS':([38,39,40,41,42,43,46,57,63,64,65,66,70,74,75,76,77,78,79,85,86,],[60,-30,-38,-39,-40,-41,60,60,-35,-36,-37,60,60,-31,-32,-33,-34,-42,60,60,60,]),'TIMES':([38,39,40,41,42,43,46,57,63,64,65,66,70,74,75,76,77,78,79,85,86,],[61,-30,-38,-39,-40,-41,61,61,-35,-36,-37,61,61,-31,-32,-33,-34,-42,61,61,61,]),'DIVIDE':([38,39,40,41,42,43,46,57,63,64,65,66,70,74,75,76,77,78,79,85,86,],[62,-30,-38,-39,-40,-41,62,62,-35,-36,-37,62,62,-31,-32,-33,-34,-42,62,62,62,]),'TRUE':([38,39,40,41,42,43,46,57,63,64,65,66,70,74,75,76,77,78,79,85,86,],[64,-30,-38,-39,-40,-41,64,64,-35,-36,-37,64,64,-31,-32,-33,-34,-42,64,64,64,]),'FALSE':([38,39,40,41,42,43,46,57,63,64,65,66,70,74,75,76,77,78,79,85,86,],[65,-30,-38,-39,-40,-41,65,65,-35,-36,-37,65,65,-31,-32,-33,-34,-42,65,65,65,]),'THEN':([39,40,41,42,43,46,63,64,65,74,75,76,77,78,],[-30,-38,-39,-40,-41,68,-35,-36,-37,-31,-32,-33,-34,-42,]),'PARENT_F':([39,40,41,42,43,63,64,65,66,69,70,71,74,75,76,77,78,85,],[-30,-38,-39,-40,-41,-35,-36,-37,78,81,-43,83,-31,-32,-33,-34,-42,-44,]),'TO':([39,40,41,42,43,63,64,65,74,75,76,77,78,79,],[-30,-38,-39,-40,-41,-35,-36,-37,-31,-32,-33,-34,-42,84,]),}
+_lr_action_items = {'PROGRAM':([0,],[2,]),'$end':([1,5,57,],[0,-1,-2,]),'ID':([2,7,9,10,11,14,26,27,28,31,33,36,37,46,49,50,60,61,62,63,64,65,66,67,68,69,74,75,79,94,96,97,101,],[3,13,25,13,-5,25,42,47,42,-6,55,25,42,42,42,78,25,42,42,42,42,42,42,42,42,42,42,25,-7,42,42,25,25,]),'PONTO_VIRGULA':([3,9,14,15,16,17,18,19,20,21,22,23,24,34,36,39,40,41,42,43,44,45,51,52,53,54,56,58,59,60,70,71,72,75,80,81,82,83,84,85,86,87,88,89,90,92,93,95,97,100,101,102,],[4,-53,-53,36,-13,-15,-16,-17,-18,-19,-20,-21,-22,36,-53,-31,-44,-45,-46,-47,-48,-49,79,-10,-11,-12,-30,-14,-23,-53,-41,-42,-43,-53,-24,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,-26,-28,-29,-53,-27,-53,-25,]),'VAR':([4,],[7,]),'BEGIN':([4,6,8,9,10,11,14,31,36,60,75,79,97,101,],[-53,9,-4,14,-3,-5,14,-6,14,14,14,-7,14,14,]),'WHILE':([9,14,36,60,75,97,101,],[26,26,26,26,26,26,26,]),'FOR':([9,14,36,60,75,97,101,],[27,27,27,27,27,27,27,]),'IF':([9,14,36,60,75,97,101,],[28,28,28,28,28,28,28,]),'WRITELN':([9,14,36,60,75,97,101,],[29,29,29,29,29,29,29,]),'READLN':([9,14,36,60,75,97,101,],[30,30,30,30,30,30,30,]),'END':([9,14,15,16,17,18,19,20,21,22,23,24,34,36,39,40,41,42,43,44,45,56,58,59,60,70,71,72,75,80,81,82,83,84,85,86,87,88,89,90,92,93,95,97,100,101,102,],[-53,-53,35,-13,-15,-16,-17,-18,-19,-20,-21,-22,56,-53,-31,-44,-45,-46,-47,-48,-49,-30,-14,-23,-53,-41,-42,-43,-53,-24,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,-26,-28,-29,-53,-27,-53,-25,]),'DOIS_PONTOS':([12,13,55,],[32,-8,-9,]),'VIRGULA':([12,13,39,40,41,42,43,44,45,55,70,71,72,76,77,81,82,83,84,85,86,87,88,89,90,98,],[33,-8,-31,-44,-45,-46,-47,-48,-49,-9,-41,-42,-43,94,-51,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,-52,]),'ELSE':([17,18,19,20,21,22,23,24,39,40,41,42,43,44,45,56,59,60,70,71,72,75,80,81,82,83,84,85,86,87,88,89,90,92,93,95,97,100,101,102,],[-15,-16,-17,-18,-19,-20,-21,-22,-31,-44,-45,-46,-47,-48,-49,-30,-23,-53,-41,-42,-43,-53,-24,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,97,-28,-29,-53,-27,-53,-25,]),'ASSIGN':([25,47,],[37,74,]),'NUM_INT':([26,28,37,46,49,61,62,63,64,65,66,67,68,69,74,94,96,],[40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,]),'NUM_REAL':([26,28,37,46,49,61,62,63,64,65,66,67,68,69,74,94,96,],[41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,]),'LIT_STRING':([26,28,37,46,49,61,62,63,64,65,66,67,68,69,74,94,96,],[43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,]),'TRUE':([26,28,37,38,39,40,41,42,43,44,45,46,48,49,59,61,62,63,64,65,66,67,68,69,70,71,72,73,74,77,81,82,83,84,85,86,87,88,89,90,91,94,96,98,99,],[44,44,44,71,-31,-44,-45,-46,-47,-48,-49,44,71,44,71,44,44,44,44,44,44,44,44,44,-41,-42,-43,71,44,71,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,71,44,44,71,71,]),'FALSE':([26,28,37,38,39,40,41,42,43,44,45,46,48,49,59,61,62,63,64,65,66,67,68,69,70,71,72,73,74,77,81,82,83,84,85,86,87,88,89,90,91,94,96,98,99,],[45,45,45,72,-31,-44,-45,-46,-47,-48,-49,45,72,45,72,45,45,45,45,45,45,45,45,45,-41,-42,-43,72,45,72,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,72,45,45,72,72,]),'PARENT_A':([26,28,29,30,37,46,49,61,62,63,64,65,66,67,68,69,74,94,96,],[46,46,49,50,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,]),'INTEGER':([32,],[52,]),'STRING':([32,],[53,]),'BOOLEAN':([32,],[54,]),'PONTO':([35,],[57,]),'DO':([38,39,40,41,42,43,44,45,70,71,72,81,82,83,84,85,86,87,88,89,90,99,],[60,-31,-44,-45,-46,-47,-48,-49,-41,-42,-43,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,101,]),'PLUS':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[61,-31,-44,-45,-46,-47,-48,-49,61,61,-41,-42,-43,61,61,-32,-33,-34,-35,-36,-37,61,61,61,-50,61,61,61,]),'MINUS':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[62,-31,-44,-45,-46,-47,-48,-49,62,62,-41,-42,-43,62,62,-32,-33,-34,-35,-36,-37,62,62,62,-50,62,62,62,]),'TIMES':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[63,-31,-44,-45,-46,-47,-48,-49,63,63,-41,-42,-43,63,63,-32,-33,-34,-35,-36,-37,63,63,63,-50,63,63,63,]),'DIVIDE':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[64,-31,-44,-45,-46,-47,-48,-49,64,64,-41,-42,-43,64,64,-32,-33,-34,-35,-36,-37,64,64,64,-50,64,64,64,]),'DIV':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[65,-31,-44,-45,-46,-47,-48,-49,65,65,-41,-42,-43,65,65,-32,-33,-34,-35,-36,-37,65,65,65,-50,65,65,65,]),'MOD':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[66,-31,-44,-45,-46,-47,-48,-49,66,66,-41,-42,-43,66,66,-32,-33,-34,-35,-36,-37,66,66,66,-50,66,66,66,]),'AND':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[67,-31,-44,-45,-46,-47,-48,-49,67,67,-41,-42,-43,67,67,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,67,67,67,]),'EQUAL':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[68,-31,-44,-45,-46,-47,-48,-49,68,68,-41,-42,-43,68,68,-32,-33,-34,-35,-36,-37,68,None,None,-50,68,68,68,]),'MENOR_IGUAL':([38,39,40,41,42,43,44,45,48,59,70,71,72,73,77,81,82,83,84,85,86,87,88,89,90,91,98,99,],[69,-31,-44,-45,-46,-47,-48,-49,69,69,-41,-42,-43,69,69,-32,-33,-34,-35,-36,-37,69,None,None,-50,69,69,69,]),'THEN':([39,40,41,42,43,44,45,48,70,71,72,81,82,83,84,85,86,87,88,89,90,],[-31,-44,-45,-46,-47,-48,-49,75,-41,-42,-43,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,]),'PARENT_F':([39,40,41,42,43,44,45,70,71,72,73,76,77,78,81,82,83,84,85,86,87,88,89,90,98,],[-31,-44,-45,-46,-47,-48,-49,-41,-42,-43,90,93,-51,95,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,-52,]),'TO':([39,40,41,42,43,44,45,70,71,72,81,82,83,84,85,86,87,88,89,90,91,],[-31,-44,-45,-46,-47,-48,-49,-41,-42,-43,-32,-33,-34,-35,-36,-37,-38,-39,-40,-50,96,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'resto':([4,],[5,]),'vars':([4,],[6,]),'empty':([4,9,14,36,58,68,87,],[8,24,24,24,24,24,24,]),'var_list':([7,],[10,]),'var':([7,10,],[11,31,]),'id_list':([7,10,],[12,12,]),'codigo':([9,14,],[15,34,]),'comando_lista':([9,14,36,58,68,87,],[16,16,56,73,80,88,]),'comando_assign':([9,14,36,58,68,87,],[17,17,17,17,17,17,]),'comando_while':([9,14,36,58,68,87,],[18,18,18,18,18,18,]),'comando_for':([9,14,36,58,68,87,],[19,19,19,19,19,19,]),'comando_if':([9,14,36,58,68,87,],[20,20,20,20,20,20,]),'comando_writeln':([9,14,36,58,68,87,],[21,21,21,21,21,21,]),'comando_readln':([9,14,36,58,68,87,],[22,22,22,22,22,22,]),'comando_begin':([9,14,36,58,68,87,],[23,23,23,23,23,23,]),'expressao':([26,28,37,44,47,67,82,84,],[38,46,57,66,70,79,85,86,]),'termo':([26,28,37,44,47,59,60,61,62,67,82,84,],[39,39,39,39,39,74,75,76,77,39,39,39,]),'tipo':([32,],[49,]),'BOOL':([38,46,57,66,70,79,85,86,],[63,63,63,63,63,63,63,63,]),'argumentos':([47,],[69,]),}
+_lr_goto_items = {'program':([0,],[1,]),'resto':([4,],[5,]),'vars':([4,],[6,]),'empty':([4,9,14,36,60,75,97,101,],[8,24,24,24,24,24,24,24,]),'var_list':([7,],[10,]),'var':([7,10,],[11,31,]),'id_list':([7,10,],[12,12,]),'codigo':([9,14,],[15,34,]),'comando_lista':([9,14,36,60,75,97,101,],[16,16,58,80,92,100,102,]),'comando_assign':([9,14,36,60,75,97,101,],[17,17,17,17,17,17,17,]),'comando_while':([9,14,36,60,75,97,101,],[18,18,18,18,18,18,18,]),'comando_for':([9,14,36,60,75,97,101,],[19,19,19,19,19,19,19,]),'comando_if':([9,14,36,60,75,97,101,],[20,20,20,20,20,20,20,]),'comando_writeln':([9,14,36,60,75,97,101,],[21,21,21,21,21,21,21,]),'comando_readln':([9,14,36,60,75,97,101,],[22,22,22,22,22,22,22,]),'comando_begin':([9,14,36,60,75,97,101,],[23,23,23,23,23,23,23,]),'expressao':([26,28,37,46,49,67,68,69,74,94,96,],[38,48,59,73,77,87,88,89,91,98,99,]),'termo':([26,28,37,46,49,61,62,63,64,65,66,67,68,69,74,94,96,],[39,39,39,39,39,81,82,83,84,85,86,39,39,39,39,39,39,]),'tipo':([32,],[51,]),'BOOL':([38,48,59,73,77,87,88,89,91,98,99,],[70,70,70,70,70,70,70,70,70,70,70,]),'argumentos':([49,],[76,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,49 +27,57 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> PROGRAM ID PONTO_VIRGULA resto','program',4,'p_program','projeto.py',146),
-  ('resto -> vars BEGIN codigo END PONTO','resto',5,'p_resto','projeto.py',151),
-  ('vars -> VAR var_list','vars',2,'p_vars','projeto.py',157),
-  ('vars -> empty','vars',1,'p_vars','projeto.py',158),
-  ('var_list -> var','var_list',1,'p_var_list','projeto.py',166),
-  ('var_list -> var_list var','var_list',2,'p_var_list','projeto.py',167),
-  ('var -> id_list DOIS_PONTOS tipo PONTO_VIRGULA','var',4,'p_var','projeto.py',174),
-  ('id_list -> ID','id_list',1,'p_id_list','projeto.py',178),
-  ('id_list -> id_list VIRGULA ID','id_list',3,'p_id_list','projeto.py',179),
-  ('tipo -> INTEGER','tipo',1,'p_tipo','projeto.py',186),
-  ('tipo -> STRING','tipo',1,'p_tipo','projeto.py',187),
-  ('tipo -> BOOLEAN','tipo',1,'p_tipo','projeto.py',188),
-  ('codigo -> comando_lista','codigo',1,'p_codigo','projeto.py',192),
-  ('codigo -> codigo PONTO_VIRGULA comando_lista','codigo',3,'p_codigo','projeto.py',193),
-  ('comando_lista -> comando_assign','comando_lista',1,'p_comando_lista','projeto.py',200),
-  ('comando_lista -> comando_while','comando_lista',1,'p_comando_lista','projeto.py',201),
-  ('comando_lista -> comando_for','comando_lista',1,'p_comando_lista','projeto.py',202),
-  ('comando_lista -> comando_if','comando_lista',1,'p_comando_lista','projeto.py',203),
-  ('comando_lista -> comando_writeln','comando_lista',1,'p_comando_lista','projeto.py',204),
-  ('comando_lista -> comando_readln','comando_lista',1,'p_comando_lista','projeto.py',205),
-  ('comando_lista -> comando_begin','comando_lista',1,'p_comando_lista','projeto.py',206),
-  ('comando_lista -> empty','comando_lista',1,'p_comando_lista','projeto.py',207),
-  ('comando_assign -> ID ASSIGN expressao','comando_assign',3,'p_comando_assign','projeto.py',211),
-  ('comando_while -> WHILE expressao DO comando_lista','comando_while',4,'p_while','projeto.py',215),
-  ('comando_for -> FOR ID ASSIGN expressao TO expressao DO comando_lista','comando_for',8,'p_comando_for','projeto.py',219),
-  ('comando_if -> IF expressao THEN comando_lista','comando_if',4,'p_if','projeto.py',224),
-  ('comando_writeln -> WRITELN PARENT_A argumentos PARENT_F','comando_writeln',4,'p_comando_writeln','projeto.py',228),
-  ('comando_readln -> READLN PARENT_A ID PARENT_F','comando_readln',4,'p_comando_readln','projeto.py',232),
-  ('comando_begin -> BEGIN codigo END','comando_begin',3,'p_begin','projeto.py',236),
-  ('expressao -> termo','expressao',1,'p_expressao','projeto.py',242),
-  ('expressao -> expressao PLUS termo','expressao',3,'p_expressao','projeto.py',243),
-  ('expressao -> expressao MINUS termo','expressao',3,'p_expressao','projeto.py',244),
-  ('expressao -> expressao TIMES termo','expressao',3,'p_expressao','projeto.py',245),
-  ('expressao -> expressao DIVIDE termo','expressao',3,'p_expressao','projeto.py',246),
-  ('expressao -> expressao BOOL','expressao',2,'p_expressao','projeto.py',247),
-  ('BOOL -> TRUE','BOOL',1,'p_BOOL','projeto.py',254),
-  ('BOOL -> FALSE','BOOL',1,'p_BOOL','projeto.py',255),
-  ('termo -> NUM_INT','termo',1,'p_termo','projeto.py',260),
-  ('termo -> NUM_REAL','termo',1,'p_termo','projeto.py',261),
-  ('termo -> ID','termo',1,'p_termo','projeto.py',262),
-  ('termo -> LIT_STRING','termo',1,'p_termo','projeto.py',263),
-  ('termo -> PARENT_A expressao PARENT_F','termo',3,'p_termo','projeto.py',264),
-  ('argumentos -> expressao','argumentos',1,'p_argumentos','projeto.py',278),
-  ('argumentos -> argumentos VIRGULA expressao','argumentos',3,'p_argumentos','projeto.py',279),
-  ('empty -> <empty>','empty',0,'p_empty','projeto.py',288),
+  ('program -> PROGRAM ID PONTO_VIRGULA resto','program',4,'p_program','projeto.py',148),
+  ('resto -> vars BEGIN codigo END PONTO','resto',5,'p_resto','projeto.py',153),
+  ('vars -> VAR var_list','vars',2,'p_vars','projeto.py',159),
+  ('vars -> empty','vars',1,'p_vars','projeto.py',160),
+  ('var_list -> var','var_list',1,'p_var_list','projeto.py',168),
+  ('var_list -> var_list var','var_list',2,'p_var_list','projeto.py',169),
+  ('var -> id_list DOIS_PONTOS tipo PONTO_VIRGULA','var',4,'p_var','projeto.py',176),
+  ('id_list -> ID','id_list',1,'p_id_list','projeto.py',180),
+  ('id_list -> id_list VIRGULA ID','id_list',3,'p_id_list','projeto.py',181),
+  ('tipo -> INTEGER','tipo',1,'p_tipo','projeto.py',188),
+  ('tipo -> STRING','tipo',1,'p_tipo','projeto.py',189),
+  ('tipo -> BOOLEAN','tipo',1,'p_tipo','projeto.py',190),
+  ('codigo -> comando_lista','codigo',1,'p_codigo','projeto.py',194),
+  ('codigo -> codigo PONTO_VIRGULA comando_lista','codigo',3,'p_codigo','projeto.py',195),
+  ('comando_lista -> comando_assign','comando_lista',1,'p_comando_lista','projeto.py',202),
+  ('comando_lista -> comando_while','comando_lista',1,'p_comando_lista','projeto.py',203),
+  ('comando_lista -> comando_for','comando_lista',1,'p_comando_lista','projeto.py',204),
+  ('comando_lista -> comando_if','comando_lista',1,'p_comando_lista','projeto.py',205),
+  ('comando_lista -> comando_writeln','comando_lista',1,'p_comando_lista','projeto.py',206),
+  ('comando_lista -> comando_readln','comando_lista',1,'p_comando_lista','projeto.py',207),
+  ('comando_lista -> comando_begin','comando_lista',1,'p_comando_lista','projeto.py',208),
+  ('comando_lista -> empty','comando_lista',1,'p_comando_lista','projeto.py',209),
+  ('comando_assign -> ID ASSIGN expressao','comando_assign',3,'p_comando_assign','projeto.py',213),
+  ('comando_while -> WHILE expressao DO comando_lista','comando_while',4,'p_while','projeto.py',217),
+  ('comando_for -> FOR ID ASSIGN expressao TO expressao DO comando_lista','comando_for',8,'p_comando_for','projeto.py',221),
+  ('comando_if -> IF expressao THEN comando_lista','comando_if',4,'p_if','projeto.py',226),
+  ('comando_if -> IF expressao THEN comando_lista ELSE comando_lista','comando_if',6,'p_if','projeto.py',227),
+  ('comando_writeln -> WRITELN PARENT_A argumentos PARENT_F','comando_writeln',4,'p_comando_writeln','projeto.py',234),
+  ('comando_readln -> READLN PARENT_A ID PARENT_F','comando_readln',4,'p_comando_readln','projeto.py',238),
+  ('comando_begin -> BEGIN codigo END','comando_begin',3,'p_begin','projeto.py',242),
+  ('expressao -> termo','expressao',1,'p_expressao','projeto.py',248),
+  ('expressao -> expressao PLUS termo','expressao',3,'p_expressao','projeto.py',249),
+  ('expressao -> expressao MINUS termo','expressao',3,'p_expressao','projeto.py',250),
+  ('expressao -> expressao TIMES termo','expressao',3,'p_expressao','projeto.py',251),
+  ('expressao -> expressao DIVIDE termo','expressao',3,'p_expressao','projeto.py',252),
+  ('expressao -> expressao DIV termo','expressao',3,'p_expressao','projeto.py',253),
+  ('expressao -> expressao MOD termo','expressao',3,'p_expressao','projeto.py',254),
+  ('expressao -> expressao AND expressao','expressao',3,'p_expressao','projeto.py',255),
+  ('expressao -> expressao EQUAL expressao','expressao',3,'p_expressao','projeto.py',256),
+  ('expressao -> expressao MENOR_IGUAL expressao','expressao',3,'p_expressao','projeto.py',257),
+  ('expressao -> expressao BOOL','expressao',2,'p_expressao','projeto.py',258),
+  ('BOOL -> TRUE','BOOL',1,'p_BOOL','projeto.py',266),
+  ('BOOL -> FALSE','BOOL',1,'p_BOOL','projeto.py',267),
+  ('termo -> NUM_INT','termo',1,'p_termo','projeto.py',272),
+  ('termo -> NUM_REAL','termo',1,'p_termo','projeto.py',273),
+  ('termo -> ID','termo',1,'p_termo','projeto.py',274),
+  ('termo -> LIT_STRING','termo',1,'p_termo','projeto.py',275),
+  ('termo -> TRUE','termo',1,'p_termo','projeto.py',276),
+  ('termo -> FALSE','termo',1,'p_termo','projeto.py',277),
+  ('termo -> PARENT_A expressao PARENT_F','termo',3,'p_termo','projeto.py',278),
+  ('argumentos -> expressao','argumentos',1,'p_argumentos','projeto.py',300),
+  ('argumentos -> argumentos VIRGULA expressao','argumentos',3,'p_argumentos','projeto.py',301),
+  ('empty -> <empty>','empty',0,'p_empty','projeto.py',310),
 ]
