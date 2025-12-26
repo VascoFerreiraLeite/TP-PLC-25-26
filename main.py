@@ -3,7 +3,7 @@ import os
 from lexer import lexer
 from parser import parser
 from semantica import analisador_semantico, tabela
-from codeGen import geracao_codigo, endereco, label_counter
+from codeGen import geracao_codigo, endereco, label_counter, reset_label
 
 def processar_ficheiro(caminho_input, pasta_output):
     nome_ficheiro = os.path.basename(caminho_input)
@@ -19,8 +19,7 @@ def processar_ficheiro(caminho_input, pasta_output):
     lexer.lineno = 1
     tabela.clear()
     endereco.clear()
-    # Se tiveres um contador global de labels no codegen.py, reseta-o também se possível
-    # Exemplo: codegen.label_counter = 0 
+    reset_label()
 
     try:
         arvore = parser.parse(conteudo, lexer=lexer)

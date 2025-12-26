@@ -14,6 +14,10 @@ for i in tabela:
 # --- Contador Global para as Labels ---
 label_counter = 0
 
+def reset_label():
+    global label_counter
+    label_counter = 0
+
 def nova_label():
     global label_counter
     label_counter += 1
