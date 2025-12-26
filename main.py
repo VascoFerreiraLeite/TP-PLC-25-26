@@ -20,33 +20,33 @@ def processar_ficheiro(caminho_input, pasta_output):
     tabela.clear()
     endereco.clear()
     reset_label()
-
     try:
         arvore = parser.parse(conteudo, lexer=lexer)
     except Exception as e:
-        print(f"Erro fatal no parser para '{nome_ficheiro}': {e}")
+        print(f"Erro fatal no parser: {e}")
         return
 
     if not arvore:
-        print(f"Aviso: Árvore vazia ou erro de sintaxe em '{nome_ficheiro}'.")
+        print(f"Aviso: Erro de sintaxe.")
         return
 
     analisador_semantico(arvore)
     
+    # Preparar output
     nome_base, _ = os.path.splitext(nome_ficheiro)
     nome_output = nome_base + ".vm"
     caminho_output = os.path.join(pasta_output, nome_output)
 
     idx = 0
-    for nome_var in tabela:
-        endereco[nome_var] = idx
+    for var in tabela:
+        endereco[var] = idx
         idx += 1
-
+    
     stdout_original = sys.stdout
     try:
         with open(caminho_output, 'w', encoding='utf-8') as f_out:
             sys.stdout = f_out
-            geracao_codigo(arvore)
+            geracao_codigo(arvore) # O codeGen agora imprime start -> allocs -> código -> stop
     except Exception as e:
         sys.stdout = stdout_original
         print(f"Erro ao escrever output: {e}")
