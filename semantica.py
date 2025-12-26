@@ -115,7 +115,6 @@ def analisador_semantico(nodo):
             
             analisador_semantico(expressao)
 
-    # NOVO: Atribuição a Array (ex: vec[i] := 10)
     elif caixa == 'ASSIGN_ARRAY':
         nome = nodo[1]
         idx_expr = nodo[2]
@@ -134,7 +133,15 @@ def analisador_semantico(nodo):
                 print(f"Erro semântico: Índice de '{nome}' deve ser INTEGER, recebido {tipo_idx}.")
 
             # 3. Verificar se o valor corresponde ao tipo do array
-            tipo_esperado = tabela[nome]['type'].upper()
+            # --- CORREÇÃO AQUI ---
+            info_tipo_base = tabela[nome]['type']
+            
+            if isinstance(info_tipo_base, dict):
+                tipo_esperado = info_tipo_base['type'].upper()
+            else:
+                tipo_esperado = str(info_tipo_base).upper()
+            # ---------------------
+
             tipo_valor = obter_tipo(val_expr)
             if tipo_valor and tipo_esperado != tipo_valor:
                 print(f"Erro semântico: Array '{nome}' espera {tipo_esperado}, recebido {tipo_valor}.")

@@ -1,0 +1,21 @@
+program Fibonacci;
+var
+  fib: array[1..10] of integer;
+  i: integer;
+begin
+  writeln('Gerando os primeiros 10 numeros de Fibonacci');
+  
+  fib[1] := 1;
+  fib[2] := 1;
+  
+  writeln('1: ', fib[1]);
+  writeln('2: ', fib[2]);
+
+  for i := 3 to 10 do
+  begin
+    fib[i] := fib[i-1] + fib[i-2];
+    writeln(i, ': ', fib[i]);
+  end;
+  
+  writeln('O 10 numero e: ', fib[10]);
+end.

@@ -1,0 +1,31 @@
+program BubbleSort;
+var
+  numeros: array[1..5] of integer;
+  i, j, temp: integer;
+begin
+  writeln('A preencher o array...');
+  numeros[1] := 50;
+  numeros[2] := 10;
+  numeros[3] := 40;
+  numeros[4] := 20;
+  numeros[5] := 30;
+
+  writeln('A ordenar...');
+  
+  for i := 1 to 4 do
+  begin
+    for j := 1 to 5 - i do
+    begin
+      if numeros[j] > numeros[j+1] then
+      begin
+        temp := numeros[j];
+        numeros[j] := numeros[j+1];
+        numeros[j+1] := temp;
+      end;
+    end;
+  end;
+
+  writeln('Valores ordenados:');
+  for i := 1 to 5 do
+    writeln(numeros[i]);
+end.
