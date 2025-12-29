@@ -1,14 +1,10 @@
-from semantica import tabela
 from semantica import tabela, obter_tipo
 
 #------------------------------------
 #-- Geração de Código ---
 #------------------------------------
 
-# O dicionário 'endereco' será preenchido pela main.py antes de chamar a geracao_codigo
 endereco = {}
-
-# --- Contador Global para as Labels ---
 label_counter = 0
 
 def reset_label():
@@ -21,7 +17,6 @@ def nova_label():
     return f"L{label_counter}"
 
 def geracao_codigo(nodo):
-    # Acede à variavel global preenchida na main
     global endereco 
     
     if nodo is None: return
@@ -35,73 +30,119 @@ def geracao_codigo(nodo):
     if caixa == 'PROGRAM':
         print("start")
         
-        # AQUI: Assume que 'endereco' e 'tabela' já estão preenchidos (pela main.py)
+        # --- CORREÇÃO: Alocações PRIMEIRO, Jump DEPOIS ---
+        
+        # 1. Alocar variáveis globais
         for var, info_tipo in tabela.items():
-            if info_tipo['cat'] == 'array':
+            # Proteção para saber se é dicionário ou string
+            tipo_cat = info_tipo['cat'] if isinstance(info_tipo, dict) else 'simple'
+            
+            if tipo_cat == 'array':
                 tamanho = info_tipo['max'] - info_tipo['min'] + 1
                 print(f"\tpushi {tamanho}")
                 print(f"\tallocn")
                 print(f"\tstoreg {endereco[var]}")
-            elif info_tipo['cat'] == 'simple' or info_tipo['cat'] == 'integer': 
-                print(f"\tpushi 0")
+            elif tipo_cat == 'simple': 
+                # Inicializa inteiros e bools a 0
+                if info_tipo.get('type') == 'STRING':
+                     print(f"\tpushs \"\"")
+                else:
+                     print(f"\tpushi 0")
                 print(f"\tstoreg {endereco[var]}")
         
+        # 2. Agora sim, saltamos as funções para ir para o MAIN
+        print("\tjump MAIN")
+        
+        # 3. Gerar o resto (Funções + Label MAIN + Código)
         geracao_codigo(nodo[2])
         print("stop")
     
     elif caixa == 'RESTO':
-        geracao_codigo(nodo[2])
+        funcoes = nodo[2]
+        codigo_main = nodo[3]
+        geracao_codigo(funcoes)
+        
+        # CORREÇÃO 1: Label MAIN limpa
+        print("MAIN:")
+        geracao_codigo(codigo_main)
+
+    # --- CORREÇÃO: Função tem de devolver valor ---
+    elif caixa == 'DEF_FUNCTION':
+        nome = nodo[1]
+        corpo = nodo[5]
+        
+        print(f"FUNC{nome}:")
+        geracao_codigo(corpo)
+        
+        # IMPORTANTE: Pôr o resultado na stack antes de sair!
+        # O resultado está guardado na variável com o nome da função
+        if nome in endereco:
+             print(f"\tpushg {endereco[nome]}")
+             
+        print("\treturn")
+
+    elif caixa == 'CALL':
+        nome = nodo[1]
+        args_lista = nodo[2]
+        
+        if nome.lower() == 'length':
+            geracao_codigo(args_lista[0])
+            # CORREÇÃO: A instrução documentada é STRLEN
+            print("\tstrlen")  
+        else:
+            geracao_codigo(args_lista)
+            print(f"\tpusha FUNC{nome}")
+            print("\tcall")
 
     elif caixa == 'WRITELN':
         args = nodo[1]
         for arg in args:
+            # Caso especial para strings diretas no writeln
             if isinstance(arg, tuple) and arg[0] == 'STR':
                 print(f"\tpushs \"{arg[1]}\"")
                 print("\twrites")
-            
             else:
                 geracao_codigo(arg)
-                
                 tipo = obter_tipo(arg)
-                
-                if tipo == 'INTEGER':
-                    print("\twritei")
-                elif tipo == 'BOOLEAN':
-                    print("\twritei") # A VM não tem writeb, usamos writei (0 ou 1)
-                elif tipo == 'REAL':
-                    print("\twritef")
-                elif tipo == 'STRING':
-                    print("\twrites")
-                else:
-                    print("\twritei") 
+                if tipo == 'REAL': print("\twritef")
+                elif tipo == 'STRING': print("\twrites")
+                else: print("\twritei")
         print("\twriteln")
             
     elif caixa == 'READLN':
-        # Nota: Se quiseres suportar readln(arr[i]), precisas de logica extra aqui
-        # Para variaveis simples funciona assim:
-        if isinstance(nodo[1], str):
-            var_e = endereco[nodo[1]]
+        item = nodo[1]
+        
+        # Leitura de variável simples
+        if isinstance(item, str):
+            var_e = endereco[item]
             print("\tread")
-            print("\tatoi")
+            
+            # Só fazemos atoi se NÃO for String!
+            # Precisamos de ir à tabela ver o tipo
+            info = tabela.get(item)
+            # Proteção: se info for dict usa ['type'], senão usa str(info)
+            tipo_var = info['type'] if isinstance(info, dict) else str(info)
+            
+            if tipo_var.upper() != 'STRING':
+                print("\tatoi")
+                
             print(f"\tstoreg {var_e}")
-        elif isinstance(nodo[1], tuple) and nodo[1][0] == 'ARRAY_ACCESS':
-            # Suporte para ler para um array: readln(vec[i])
-            nome = nodo[1][1]
-            idx_expr = nodo[1][2]
+            
+        # Leitura de Array (mantém-se, assumindo array de inteiros)
+        elif isinstance(item, tuple) and item[0] == 'ARRAY_ACCESS':
+            nome = item[1]
+            idx_expr = item[2]
             info = tabela[nome]
-            offset = info['min']
             
-            # 1. Preparar endereço e índice
-            print(f"\tpushg {endereco[nome]}") # Endereço Base
-            geracao_codigo(idx_expr)         # Índice i
+            if info.get('type') == 'STRING': offset = 1
+            else: offset = info['min']
+            
+            print(f"\tpushg {endereco[nome]}") 
+            geracao_codigo(idx_expr)         
             print(f"\tpushi {offset}")
-            print("\tsub")                   # i - min
-            
-            # 2. Ler valor
-            print("\tread")
+            print("\tsub")                   
+            print("\tread")                  
             print("\tatoi")
-            
-            # 3. Guardar (Stack: Addr, Index, Value)
             print("\tstoren")
     
     elif caixa == 'ASSIGN':
@@ -110,9 +151,36 @@ def geracao_codigo(nodo):
         geracao_codigo(valor)
         print(f"\tstoreg {endereco[var]}")
 
+    elif caixa == 'ASSIGN_ARRAY':
+        nome = nodo[1]
+        idx_expr = nodo[2]
+        val_expr = nodo[3]
+        info = tabela[nome]
+        
+        if info.get('type') == 'STRING': offset = 1
+        else: offset = info['min']
+
+        print(f"\tpushg {endereco[nome]}") 
+        geracao_codigo(idx_expr)         
+        print(f"\tpushi {offset}")
+        print("\tsub")                   
+        geracao_codigo(val_expr)         
+        print("\tstoren")
+
     elif caixa == 'NUM':
         print(f"\tpushi {nodo[1]}")
     
+    # --- CORREÇÃO 2: ESTE BLOCO FALTAVA! ---
+    # Sem isto, strings em comparações (ex: if x = '1') não são colocadas na stack!
+    # Adiciona/Substitui este bloco no teu codeGen.py
+    elif caixa == 'STR':
+        valor = nodo[1]
+        # TRUQUE: Se for um único caracter, tratamos como Inteiro ASCII para comparações
+        if len(valor) == 1:
+            print(f"\tpushi {ord(valor)}")
+        else:
+            print(f"\tpushs \"{valor}\"")
+
     elif caixa == 'TRUE':
         print(f"\tpushi 1")
         
@@ -121,7 +189,30 @@ def geracao_codigo(nodo):
 
     elif caixa == 'VAR':
         print(f"\tpushg {endereco[nodo[1]]}")
+        
+    elif caixa == 'ARRAY_ACCESS':
+        nome = nodo[1]
+        idx_expr = nodo[2]
+        
+        info = tabela[nome]
+        
+        # Strings na VM começam no 0, Pascal no 1 -> offset 1
+        if info.get('type') == 'STRING': 
+            offset = 1
+        else: 
+            offset = info['min']
 
+        print(f"\tpushg {endereco[nome]}") # Stack: [String]
+        geracao_codigo(idx_expr)         # Stack: [String, IndiceBruto]
+        print(f"\tpushi {offset}")
+        print("\tsub")                   # Stack: [String, IndiceReal]
+        
+        if info.get('type') == 'STRING':
+            # CORREÇÃO: CHARAT tira o caracter na posição n da string m
+            print("\tcharat") 
+        else:
+            print("\tloadn") 
+        
     elif caixa == 'CONTA':
         sinal = nodo[1]
         geracao_codigo(nodo[2])
@@ -131,11 +222,10 @@ def geracao_codigo(nodo):
             '+': 'add', '-': 'sub', '*': 'mul', '/': 'div', 
             'div': 'div', 'mod': 'mod', 'and': 'mul',
             '=': 'equal', '<': 'inf', '>': 'sup', 
-            '<=': 'infeq', '>=': 'supeq', 'or': 'or' # Adicionei 'or' caso tenhas
+            '<=': 'infeq', '>=': 'supeq', 'or': 'or'
         }
         instrucao = sinais.get(sinal)
-        if instrucao:
-            print(f"\t{instrucao}")
+        if instrucao: print(f"\t{instrucao}")
 
     elif caixa == 'WHILE':
         lbl_ini = nova_label()
@@ -165,12 +255,18 @@ def geracao_codigo(nodo):
         geracao_codigo(nodo[3])
         print(f"{lbl_fim}:")
 
+    # --- CORREÇÃO 3: Lógica DOWNTO robusta ---
     elif caixa == 'FOR':
         var = nodo[1]
         inicio = nodo[2]
         fim = nodo[3]
-        resto = nodo[4]
+        corpo = nodo[4]
         
+        sentido = 'TO'
+        # Garante que lê string independentemente de maiusculas/minusculas
+        if len(nodo) > 5 and isinstance(nodo[5], str):
+            sentido = nodo[5].upper()
+
         lbl_in = nova_label()
         lbl_out = nova_label()
 
@@ -180,45 +276,27 @@ def geracao_codigo(nodo):
         print(f"{lbl_in}:")
         print(f"\tpushg {endereco[var]}")
         geracao_codigo(fim)
-        print(f"\tinfeq")
+        
+        # Lógica invertida para downto
+        if sentido == 'DOWNTO':
+            print(f"\tsupeq") # i >= n  (CORREÇÃO AQUI)
+        else:
+            print(f"\tinfeq") # i <= n
+            
         print(f"\tjz {lbl_out}")
 
-        geracao_codigo(resto)
+        geracao_codigo(corpo)
 
         print(f"\tpushg {endereco[var]}")
         print(f"\tpushi 1")
-        print(f"\tadd")
+        
+        # Decremento para downto
+        if sentido == 'DOWNTO':
+            print(f"\tsub")   # i - 1 (CORREÇÃO AQUI)
+        else:
+            print(f"\tadd")
+            
         print(f"\tstoreg {endereco[var]}")
 
         print(f"\tjump {lbl_in}")
         print(f"{lbl_out}:")
-
-    # --- CORREÇÃO AQUI ---
-    # Usar 'caixa' ou 'nodo' em vez de 't'
-    elif caixa == 'ASSIGN_ARRAY':
-        nome = nodo[1]
-        idx_expr = nodo[2]
-        val_expr = nodo[3]
-        
-        info = tabela[nome]
-        offset = info['min']
-
-        print(f"\tpushg {endereco[nome]}") # Base
-        geracao_codigo(idx_expr)         # Indice expr
-        print(f"\tpushi {offset}")
-        print("\tsub")                   # Indice real
-        geracao_codigo(val_expr)         # Valor
-        print("\tstoren")
-
-    elif caixa == 'ARRAY_ACCESS':
-        nome = nodo[1]
-        idx_expr = nodo[2]
-        
-        info = tabela[nome]
-        offset = info['min']
-
-        print(f"\tpushg {endereco[nome]}")
-        geracao_codigo(idx_expr)
-        print(f"\tpushi {offset}")
-        print("\tsub")
-        print("\tloadn")

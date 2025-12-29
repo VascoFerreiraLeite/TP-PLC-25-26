@@ -65,6 +65,20 @@ def obter_tipo(nodo):
             
         print(f"Erro semântico: tipos incompatíveis na operação '{op}': '{tipo_esq}' vs '{tipo_dir}'")
         return None
+    # No inicio da função obter_tipo(nodo), adiciona isto antes do return None final:
+
+    if caixa == 'CALL':
+        nome = nodo[1]
+        # Hack para funções nativas do Pascal
+        if nome.lower() == 'length':
+            return 'INTEGER'
+            
+        if nome in tabela:
+            # Se for uma função que definimos, devolve o tipo dela
+            info = tabela[nome]
+            if isinstance(info, dict): return info['type'].upper()
+            return str(info).upper()
+        return None
 
 #------------------------------------
 #-- Analisador Semântico ---
@@ -96,10 +110,36 @@ def analisador_semantico(nodo):
             else:
                 tabela[var] = tipo_info
 
-    elif caixa == 'RESTO':
-        analisador_semantico(nodo[1])  # vars
-        analisador_semantico(nodo[2])  # codigo
+    # ... (código anterior mantém-se igual) ...
 
+    elif caixa == 'RESTO':
+        # O tuplo agora tem 4 elementos: ('RESTO', vars, funcoes, codigo)
+        analisador_semantico(nodo[1])  # Registar Variáveis Globais
+        analisador_semantico(nodo[2])  # Analisar Funções (CRÍTICO: é aqui que ele vai encontrar a 'potencia')
+        analisador_semantico(nodo[3])  # Analisar Código Principal
+
+    elif caixa == 'DEF_FUNCTION':
+        # ('DEF_FUNCTION', nome, args, tipo_retorno, vars_locais, corpo)
+        nome = nodo[1]
+        tipo_retorno = nodo[3]
+        vars_locais = nodo[4]
+        corpo = nodo[5]
+        
+        # 1. Truque: Registar o nome da função como se fosse uma variável
+        # Isto permite fazer "NomeFuncao := valor" para o return do Pascal
+        if isinstance(tipo_retorno, dict): tipo_str = tipo_retorno['type']
+        else: tipo_str = str(tipo_retorno)
+        
+        tabela[nome] = {'cat': 'simple', 'type': tipo_str.upper()}
+
+        # 2. Registar as variáveis locais na tabela global
+        # (Isto é uma simplificação para a VM: todas as vars têm endereço único global)
+        analisador_semantico(vars_locais)
+        
+        # 3. Analisar o corpo da função
+        analisador_semantico(corpo)
+
+    # ... (o resto do código mantém-se igual) ...
     elif caixa == 'ASSIGN':
         var = nodo[1]
         expressao = nodo[2]
