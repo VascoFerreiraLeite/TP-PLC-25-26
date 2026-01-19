@@ -1,0 +1,141 @@
+start
+	pushi 5
+	allocn
+	storeg 0
+	pushi 0
+	storeg 1
+	pushi 0
+	storeg 2
+	pushi 0
+	storeg 3
+	jump MAIN
+MAIN:
+	pushs "A preencher o array..."
+	writes
+	writeln
+	pushg 0
+	pushi 1
+	pushi 1
+	sub
+	pushi 50
+	storen
+	pushg 0
+	pushi 2
+	pushi 1
+	sub
+	pushi 10
+	storen
+	pushg 0
+	pushi 3
+	pushi 1
+	sub
+	pushi 40
+	storen
+	pushg 0
+	pushi 4
+	pushi 1
+	sub
+	pushi 20
+	storen
+	pushg 0
+	pushi 5
+	pushi 1
+	sub
+	pushi 30
+	storen
+	pushs "A ordenar..."
+	writes
+	writeln
+	pushi 1
+	storeg 1
+L1:
+	pushg 1
+	pushi 4
+	infeq
+	jz L2
+	pushi 1
+	storeg 2
+L3:
+	pushg 2
+	pushi 5
+	pushg 1
+	sub
+	infeq
+	jz L4
+	pushg 0
+	pushg 2
+	pushi 1
+	sub
+	loadn
+	pushg 0
+	pushg 2
+	pushi 1
+	add
+	pushi 1
+	sub
+	loadn
+	sup
+	jz L5
+	pushg 0
+	pushg 2
+	pushi 1
+	sub
+	loadn
+	storeg 3
+	pushg 0
+	pushg 2
+	pushi 1
+	sub
+	pushg 0
+	pushg 2
+	pushi 1
+	add
+	pushi 1
+	sub
+	loadn
+	storen
+	pushg 0
+	pushg 2
+	pushi 1
+	add
+	pushi 1
+	sub
+	pushg 3
+	storen
+L5:
+	pushg 2
+	pushi 1
+	add
+	storeg 2
+	jump L3
+L4:
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump L1
+L2:
+	pushs "Valores ordenados:"
+	writes
+	writeln
+	pushi 1
+	storeg 1
+L6:
+	pushg 1
+	pushi 5
+	infeq
+	jz L7
+	pushg 0
+	pushg 1
+	pushi 1
+	sub
+	loadn
+	writei
+	writeln
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump L6
+L7:
+stop

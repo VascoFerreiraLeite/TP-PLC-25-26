@@ -1,0 +1,49 @@
+start
+	pushi 5
+	allocn
+	storeg 0
+	pushi 0
+	storeg 1
+	pushi 0
+	storeg 2
+	jump MAIN
+MAIN:
+	pushi 0
+	storeg 2
+	pushs "Introduza 5 números inteiros:"
+	writes
+	writeln
+	pushi 1
+	storeg 1
+L1:
+	pushg 1
+	pushi 5
+	infeq
+	jz L2
+	pushg 0
+	pushg 1
+	pushi 1
+	sub
+	read
+	atoi
+	storen
+	pushg 2
+	pushg 0
+	pushg 1
+	pushi 1
+	sub
+	loadn
+	add
+	storeg 2
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump L1
+L2:
+	pushs "A soma dos números é: "
+	writes
+	pushg 2
+	writei
+	writeln
+stop

@@ -1,0 +1,95 @@
+start
+	pushi 10
+	allocn
+	storeg 0
+	pushi 0
+	storeg 1
+	jump MAIN
+MAIN:
+	pushs "Gerando os primeiros 10 numeros de Fibonacci"
+	writes
+	writeln
+	pushg 0
+	pushi 1
+	pushi 1
+	sub
+	pushi 1
+	storen
+	pushg 0
+	pushi 2
+	pushi 1
+	sub
+	pushi 1
+	storen
+	pushs "1: "
+	writes
+	pushg 0
+	pushi 1
+	pushi 1
+	sub
+	loadn
+	writei
+	writeln
+	pushs "2: "
+	writes
+	pushg 0
+	pushi 2
+	pushi 1
+	sub
+	loadn
+	writei
+	writeln
+	pushi 3
+	storeg 1
+L1:
+	pushg 1
+	pushi 10
+	infeq
+	jz L2
+	pushg 0
+	pushg 1
+	pushi 1
+	sub
+	pushg 0
+	pushg 1
+	pushi 1
+	sub
+	pushi 1
+	sub
+	loadn
+	pushg 0
+	pushg 1
+	pushi 2
+	sub
+	pushi 1
+	sub
+	loadn
+	add
+	storen
+	pushg 1
+	writei
+	pushs ": "
+	writes
+	pushg 0
+	pushg 1
+	pushi 1
+	sub
+	loadn
+	writei
+	writeln
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump L1
+L2:
+	pushs "O 10 numero e: "
+	writes
+	pushg 0
+	pushi 10
+	pushi 1
+	sub
+	loadn
+	writei
+	writeln
+stop

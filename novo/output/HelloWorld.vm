@@ -1,0 +1,7 @@
+start
+	jump MAIN
+MAIN:
+	pushs "Ola, Mundo!"
+	writes
+	writeln
+stop
