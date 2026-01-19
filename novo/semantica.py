@@ -155,8 +155,6 @@ def analisador_semantico(nodo):
     
     elif caixa == 'FOR':
         var=nodo[1]
-        inicio=nodo[2]
-        fim=nodo[3]
         if var not in tabela:
             print(f"Erro semântico: variável '{var}' não declarada.")
         else:
