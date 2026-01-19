@@ -10,58 +10,55 @@ start
 	storeg 3
 	jump MAIN
 MAIN:
-	pushs "A preencher o array..."
-	writes
-	writeln
-	pushg 0
-	pushi 1
-	pushi 1
-	sub
-	pushi 50
-	storen
-	pushg 0
-	pushi 2
-	pushi 1
-	sub
-	pushi 10
-	storen
-	pushg 0
-	pushi 3
-	pushi 1
-	sub
-	pushi 40
-	storen
-	pushg 0
-	pushi 4
-	pushi 1
-	sub
-	pushi 20
-	storen
-	pushg 0
-	pushi 5
-	pushi 1
-	sub
-	pushi 30
-	storen
-	pushs "A ordenar..."
+	pushs "--- Introduza 5 números inteiros ---"
 	writes
 	writeln
 	pushi 1
 	storeg 1
 L1:
 	pushg 1
-	pushi 4
+	pushi 5
 	infeq
 	jz L2
+	pushs "Digite o número "
+	writes
+	pushg 1
+	writei
+	pushs ":"
+	writes
+	writeln
+	pushg 0
+	pushg 1
+	pushi 1
+	sub
+	read
+	atoi
+	storen
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump L1
+L2:
+	pushs "A ordenar..."
+	writes
+	writeln
+	pushi 1
+	storeg 1
+L3:
+	pushg 1
+	pushi 4
+	infeq
+	jz L4
 	pushi 1
 	storeg 2
-L3:
+L5:
 	pushg 2
 	pushi 5
 	pushg 1
 	sub
 	infeq
-	jz L4
+	jz L6
 	pushg 0
 	pushg 2
 	pushi 1
@@ -75,7 +72,7 @@ L3:
 	sub
 	loadn
 	sup
-	jz L5
+	jz L7
 	pushg 0
 	pushg 2
 	pushi 1
@@ -102,29 +99,29 @@ L3:
 	sub
 	pushg 3
 	storen
-L5:
+L7:
 	pushg 2
 	pushi 1
 	add
 	storeg 2
-	jump L3
-L4:
+	jump L5
+L6:
 	pushg 1
 	pushi 1
 	add
 	storeg 1
-	jump L1
-L2:
+	jump L3
+L4:
 	pushs "Valores ordenados:"
 	writes
 	writeln
 	pushi 1
 	storeg 1
-L6:
+L8:
 	pushg 1
 	pushi 5
 	infeq
-	jz L7
+	jz L9
 	pushg 0
 	pushg 1
 	pushi 1
@@ -136,6 +133,6 @@ L6:
 	pushi 1
 	add
 	storeg 1
-	jump L6
-L7:
+	jump L8
+L9:
 stop
