@@ -70,7 +70,6 @@ def geracao_codigo(nodo):
         corpo = nodo[5]
         print(f"FUNC{nome}:")
         
-        # Argumentos já nas variáveis globais
         
         geracao_codigo(corpo)
         
@@ -129,14 +128,13 @@ def geracao_codigo(nodo):
             idx_expr = arg[2]
             info = tabela[nome]
             offset = info[1] 
-            print(f"\tpushg {endereco[nome]}") # Base
-            geracao_codigo(idx_expr)         # Indice
+            print(f"\tpushg {endereco[nome]}") 
+            geracao_codigo(idx_expr)       
             print(f"\tpushi {offset}")
-            print("\tsub")                   # Indice Real
-            # (Removido o ADD aqui)
-            print("\tread")                  # Valor lido
+            print("\tsub")                  
+            print("\tread")                 
             print("\tatoi")
-            print("\tstoren")                # storen(Base, Indice, Valor)
+            print("\tstoren")               
     
     elif caixa == 'ASSIGN':
         var = nodo[1]
@@ -151,13 +149,12 @@ def geracao_codigo(nodo):
         info = tabela[nome]
         offset = info[1] if isinstance(info, tuple) else 1
         
-        print(f"\tpushg {endereco[nome]}") # Base
-        geracao_codigo(idx_expr)         # Indice
+        print(f"\tpushg {endereco[nome]}") 
+        geracao_codigo(idx_expr)         
         print(f"\tpushi {offset}")
-        print("\tsub")                   # Indice Real
-        # (Removido o ADD aqui)
-        geracao_codigo(valor_expr)       # Valor
-        print("\tstoren")                # storen(Base, Indice, Valor)
+        print("\tsub")                  
+        geracao_codigo(valor_expr)       
+        print("\tstoren")               
 
     elif caixa == 'ARRAY':
         nome = nodo[1]
@@ -165,16 +162,15 @@ def geracao_codigo(nodo):
         info = tabela[nome]
         offset = info[1] if isinstance(info, tuple) else 1
         
-        print(f"\tpushg {endereco[nome]}") # Base
-        geracao_codigo(idx_expr)         # Indice
+        print(f"\tpushg {endereco[nome]}") 
+        geracao_codigo(idx_expr)        
         print(f"\tpushi {offset}")
-        print("\tsub")                   # Indice Real
+        print("\tsub")                  
         
         if info == 'STRING' or (isinstance(info, tuple) and info[3] == 'STRING'):
              print("\tcharat")
         else:
-             # (Removido o ADD aqui)
-             print("\tloadn") # loadn(Base, Indice) -> Valor
+             print("\tloadn")
 
     elif caixa == 'STR':
         valor = nodo[1]

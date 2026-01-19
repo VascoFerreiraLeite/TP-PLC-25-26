@@ -3,15 +3,18 @@ var
   numeros: array[1..5] of integer;
   i, j, temp: integer;
 begin
-  writeln('A preencher o array...');
-  numeros[1] := 50;
-  numeros[2] := 10;
-  numeros[3] := 40;
-  numeros[4] := 20;
-  numeros[5] := 30;
+  writeln('--- Introduza 5 números inteiros ---');
+  
+  { INPUT SECTION: Loop to ask user for numbers }
+  for i := 1 to 5 do
+  begin
+    writeln('Digite o número ', i, ':');
+    readln(numeros[i]);
+  end;
 
   writeln('A ordenar...');
-  
+   
+  { SORTING LOGIC: Bubble Sort }
   for i := 1 to 4 do
   begin
     for j := 1 to 5 - i do
@@ -25,6 +28,7 @@ begin
     end;
   end;
 
+  { OUTPUT SECTION: Print results }
   writeln('Valores ordenados:');
   for i := 1 to 5 do
     writeln(numeros[i]);
