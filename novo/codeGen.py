@@ -31,7 +31,7 @@ def geracao_codigo(nodo):
     elif caixa=='REAL':
         print(f"\tpushf {nodo[1]}")
 
-    elif caixa == 'PROGRAM':
+    elif caixa=='PROGRAM':
         print("start")
         endereco.clear()
         
@@ -43,14 +43,18 @@ def geracao_codigo(nodo):
                     print(f"\tallocn")
                     print(f"\tstoreg {len(endereco)}")
                     endereco[var] = len(endereco)
-                elif info[0] == 'FUNCTION':
-                    if info[1] == 'STRING': print(f"\tpushs \"\"")
-                    else: print(f"\tpushi 0")
+                elif info[0]== 'FUNCTION':
+                    if info[1]=='STRING':
+                        print(f"\tpushs \"\"")
+                    else:
+                        print(f"\tpushi 0")
                     print(f"\tstoreg {len(endereco)}")
                     endereco[var] = len(endereco)
             else:
-                if info == 'STRING': print(f"\tpushs \"\"")
-                else: print(f"\tpushi 0")
+                if info=='STRING':
+                    print(f"\tpushs \"\"")
+                else:
+                    print(f"\tpushi 0")
                 print(f"\tstoreg {len(endereco)}")
                 endereco[var] = len(endereco)
 
@@ -68,11 +72,8 @@ def geracao_codigo(nodo):
     elif caixa == 'DEF_FUNCTION':
         nome = nodo[1]
         corpo = nodo[5]
-        print(f"FUNC{nome}:")
-        
-        
+        print(f"FUNC{nome}:")        
         geracao_codigo(corpo)
-        
         if nome in endereco:
              print(f"\tpushg {endereco[nome]}")
         print("\treturn")
@@ -125,7 +126,8 @@ def geracao_codigo(nodo):
             elif isinstance(info, tuple) and info[0] == 'FUNCTION' and info[1] == 'STRING':
                 is_string = True
             
-            if not is_string: print("\tatoi")
+            if not is_string:
+                print("\tatoi")
             print(f"\tstoreg {endereco[nome]}")
 
         elif arg[0] == 'ARRAY':
@@ -152,6 +154,7 @@ def geracao_codigo(nodo):
         idx_expr = nodo[2]
         valor_expr = nodo[3]
         info = tabela[nome]
+
         offset = info[1] if isinstance(info, tuple) else 1
         
         print(f"\tpushg {endereco[nome]}") 
