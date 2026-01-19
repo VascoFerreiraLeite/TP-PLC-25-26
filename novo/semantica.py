@@ -127,9 +127,7 @@ def analisador_semantico(nodo):
             tipo_obtido=obter_tipo(expressao)
             if tipo_var != tipo_obtido:
                 print(f"Erro semântico: tipo esperado diferente do obtido, esperado: '{tipo_var}', obtido: '{tipo_obtido}'")
-            #else:
-                #debug
-                #print(f"(ASSIGN)Atribuição válida à variável '{var}' do tipo '{tipo_var}'.")
+
             analisador_semantico(expressao)
 
     elif caixa=='ASSIGN_ARRAY':
