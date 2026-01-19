@@ -14,7 +14,7 @@ Braga, Portugal
 
 ## Introdução
 
-Este projeto consiste no desenvolvimento de um compilador para a linguagem **Pascal Standard**. O compilador realiza as a análise léxica, sintáctica e semântica — e gera como resultado código semelhante a **Assembly**, para a [**Máquina Virtual (VM)** ](https://ewvm.epl.di.uminho.pt) disponibilizada no contexto da unidade curricular.
+Este projeto consiste no desenvolvimento de um compilador para a linguagem **Pascal Standard**. O compilador realiza a análise léxica, sintáctica e semântica e gera como resultado código semelhante a **Assembly**, para a [**Máquina Virtual (VM)** ](https://ewvm.epl.di.uminho.pt) disponibilizada no contexto da unidade curricular.
 
 ----
 ### Como Executar
@@ -264,3 +264,29 @@ Verifica-se se as variáveis passadas como argumento para leitura foram previame
 Quando uma violação das regras semânticas é detetada (como o uso de uma variável não declarada ou uma operação inválida entre tipos), o compilador emite uma mensagem de erro indicando a natureza do problema (ex: `Erro semântico: tipos diferentes esq: 'INTEGER', dir: 'STRING'`), permitindo ao utilizador corrigir o código fonte antes da fase de geração de código.
 
 
+## Implementação da Geração de Código
+
+Esta etapa final dedica-se à geração do código para a Máquina Virtual (VM), percorrendo a árvore de sintaxe dada pelas intruções anteriores e traduz as instruções de Pascal para a linguagem assembly suportada pela VM
+
+
+### Gestão de Memória
+
+No início da execução, no nó PROGRAM, o gerador irá percorrer a tabela de símbolos e vai alocar espaço na heap da VM conforme as variáveis declaradas, INTEGER e BOOLEAN, são alocadas com **pushi 0**(ou pushi 1 caso seja TRUE) e armazenadas numa posição de memória global **(storeg)**. Strings são inicializadas como strings vazias **pushs ""** e relativamente a arrays, o espaço é reservado utilizando a instrução **allocn**.
+Para gerir os endereços, o compilador mantém um dicionário auxiliar endereco que mapeia o nome de cada variável ao seu índice correspondente na memória da VM.
+
+### Controlo de Fluxo
+
+As estruturas de controlo de fluxo do Pascal (for, while, if e if-else) são convertidas utilizando etiquetas (labels) e instruções de salto. A função auxiliar **nova_label** gera identificadores únicos para seram usados nos seus respetivos pontos de salto. Utiliza-se a instrução jump e as suas variações para então saltar blocos de código. Por exemplo, usa-se **jz** (jump se zero) para saltar o bloco then caso a condição seja falsa e ir para o else caso este exista. Nos ciclos **while**, usa-se duas labels, uma para marcar o início e a outra para marcar o fim deste ciclo. Caso a condição de saída se encontre verdadeira, este iŕa então sair do ciclo. No ciclo **for**, o compilador gera código para inicializar a variável de controlo, testá-la e verificar a condição de paragem (infeq para TO ou supeq para DOWNTO) e incrementar ou decrementar a variável no final de cada iteração.
+
+### Funções e Procedimentos
+
+Antes de invocar a função **CALL**, os argumentos são avaliados e os seus valores são armazenados diretamente nas variáveis globais correspondentes aos parâmetros da função (storeg). De seguida, executa-se a instrução pusha (para carregar o endereço da função) e call.
+Na **DEF_FUNCTION**, o corpo da função é identificado por uma label (ex: FUNCBinToInt). No final da execução, o valor de retorno (armazenado numa variável com o mesmo nome da função) é colocado no topo da pilha (pushg) antes da instrução return.
+
+### Arrays
+
+Para aceder a um array, o gerador coloca o endereço base e o valor do índice i na pilha. De seguida, subtrai o limite inferior do array (offset) e utiliza as instruções loadn (para leitura) ou storen (para escrita).
+
+### Input e Output
+
+A VM fornece a instrução read, que lê sempre uma sequência de caracteres (string) do input. É emitida a instrução read para colocar a string lida na pilha, se este for Integer, então usa-se atoi para tornar a string no valor númerico correspondente. Para a escrita, usa-se a instrução write que, conforme as suas variações (writei para tipo INTEGER, writef para tipo REAL, writes para tipo STRING), escreve o que for necessário. Usa-se writeln para quebra linha.

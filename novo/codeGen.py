@@ -105,9 +105,12 @@ def geracao_codigo(nodo):
             else:
                 geracao_codigo(arg)
                 tipo = obter_tipo(arg)
-                if tipo == 'REAL': print("\twritef")
-                elif tipo == 'STRING': print("\twrites")
-                else: print("\twritei")
+                if tipo == 'REAL':
+                    print("\twritef")
+                elif tipo == 'STRING':
+                    print("\twrites")
+                else:
+                    print("\twritei")
         print("\twriteln")
             
     elif caixa == 'READLN':
@@ -117,8 +120,10 @@ def geracao_codigo(nodo):
             print("\tread")
             info = tabela.get(nome)
             is_string = False
-            if info == 'STRING': is_string = True
-            elif isinstance(info, tuple) and info[0] == 'FUNCTION' and info[1] == 'STRING': is_string = True
+            if info == 'STRING':
+                is_string = True
+            elif isinstance(info, tuple) and info[0] == 'FUNCTION' and info[1] == 'STRING':
+                is_string = True
             
             if not is_string: print("\tatoi")
             print(f"\tstoreg {endereco[nome]}")
@@ -174,19 +179,25 @@ def geracao_codigo(nodo):
 
     elif caixa == 'STR':
         valor = nodo[1]
-        if len(valor) == 1: print(f"\tpushi {ord(valor)}")
-        else: print(f"\tpushs \"{valor}\"")
+        if len(valor) == 1:
+            print(f"\tpushi {ord(valor)}")
+        else:
+            print(f"\tpushs \"{valor}\"")
 
-    elif caixa == 'TRUE': print(f"\tpushi 1")
-    elif caixa == 'FALSE': print(f"\tpushi 0")
-    elif caixa == 'VAR': print(f"\tpushg {endereco[nodo[1]]}")
+    elif caixa == 'TRUE':
+        print(f"\tpushi 1")
+    elif caixa == 'FALSE':
+        print(f"\tpushi 0")
+    elif caixa == 'VAR':
+        print(f"\tpushg {endereco[nodo[1]]}")
         
     elif caixa == 'CONTA':
         sinal = nodo[1]
         geracao_codigo(nodo[2])
         geracao_codigo(nodo[3])
         sinais = {'+': 'add', '-': 'sub', '*': 'mul', '/': 'div', 'div': 'div', 'mod': 'mod', 'and': 'mul', '=': 'equal', '<': 'inf', '>': 'sup', '<=': 'infeq', '>=': 'supeq', 'or': 'or'}
-        if sinal in sinais: print(f"\t{sinais[sinal]}")
+        if sinal in sinais:
+            print(f"\t{sinais[sinal]}")
 
     elif caixa == 'WHILE':
         lbl_ini = nova_label()
@@ -223,8 +234,10 @@ def geracao_codigo(nodo):
         fim = nodo[4]
         corpo = nodo[5]
         
-        if isinstance(sentido, str): sentido = sentido.upper()
-        else: sentido = 'TO'
+        if isinstance(sentido, str):
+            sentido = sentido.upper()
+        else:
+            sentido = 'TO'
 
         lbl_in = nova_label()
         lbl_out = nova_label()
@@ -236,8 +249,10 @@ def geracao_codigo(nodo):
         print(f"\tpushg {endereco[var]}")
         geracao_codigo(fim)
         
-        if sentido == 'DOWNTO': print(f"\tsupeq")
-        else: print(f"\tinfeq")
+        if sentido == 'DOWNTO':
+            print(f"\tsupeq")
+        else:
+            print(f"\tinfeq")
             
         print(f"\tjz {lbl_out}")
 
@@ -245,8 +260,10 @@ def geracao_codigo(nodo):
 
         print(f"\tpushg {endereco[var]}")
         print(f"\tpushi 1")
-        if sentido == 'DOWNTO': print(f"\tsub")
-        else: print(f"\tadd")
+        if sentido == 'DOWNTO':
+            print(f"\tsub")
+        else:
+            print(f"\tadd")
         print(f"\tstoreg {endereco[var]}")
 
         print(f"\tjump {lbl_in}")
