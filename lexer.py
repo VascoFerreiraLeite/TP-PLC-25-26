@@ -74,6 +74,11 @@ t_PONTO         = r'\.'
 # Ignorar espaços e tabs
 t_ignore  = ' \t'
 
+def t_COMMENT(t):
+    r'\{[^}]*\}|\(\*(.|\n)*?\*\)'
+    t.lexer.lineno += t.value.count('\n')
+    pass
+
 # Regra para ID (Identificadores e Palavras Reservadas)
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'

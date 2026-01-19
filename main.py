@@ -32,9 +32,8 @@ def processar_ficheiro(caminho_input, pasta_output):
 
     analisador_semantico(arvore)
     
-    # Preparar output
     nome_base, _ = os.path.splitext(nome_ficheiro)
-    nome_output = nome_base + ".vm"
+    nome_output = nome_base + ".txt"
     caminho_output = os.path.join(pasta_output, nome_output)
 
     idx = 0
@@ -46,7 +45,7 @@ def processar_ficheiro(caminho_input, pasta_output):
     try:
         with open(caminho_output, 'w', encoding='utf-8') as f_out:
             sys.stdout = f_out
-            geracao_codigo(arvore) # O codeGen agora imprime start -> allocs -> código -> stop
+            geracao_codigo(arvore)
     except Exception as e:
         sys.stdout = stdout_original
         print(f"Erro ao escrever output: {e}")

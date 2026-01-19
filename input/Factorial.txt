@@ -1,6 +1,7 @@
+{Programa que recebe um inteiro n e devolve o fatorial do mesmo}
 program Fatorial;
 var
-n, i, fat: integer;
+n, i, fat: integer; (* n é o input, i o indice para o loop e fat o resultado*)
 begin
 writeln('Introduza um número inteiro positivo:');
 readln(n);
