@@ -214,3 +214,53 @@ A produção `empty` é utilizada para representar componentes opcionais da gram
 O parser inclui um mecanismo de tratamento de erros que detecta e reporta erros de sintaxe, indicando o token problemático e a linha onde ocorreu o erro. Em caso de fim inesperado do ficheiro, é apresentada uma mensagem apropriada.
 
 
+## Implementação da Análise Semântica
+
+A análise semântica é realizada pelo módulo `semantica.py`, que percorre a Árvore de Sintaxe Abstrata (AST) gerada pelo *parser* para validar o significado das instruções e garantir a coerência do código. Esta etapa foca-se na verificação de tipos, declaração de identificadores e validação de operações.
+
+### Tabela de Símbolos
+
+Para gerir o contexto do programa, foi utilizada uma estrutura de dados global designada por `tabela` (um dicionário de Python). Esta tabela armazena informações sobre todos os identificadores declarados, permitindo verificar se variáveis e funções são utilizadas corretamente.
+
+A tabela associa o nome do identificador (chave) à sua informação de tipo (valor):
+
+* **Variáveis Simples:** O valor é uma string com o tipo (ex: `'INTEGER'`, `'BOOLEAN'`).
+* **Arrays:** O valor é um tuplo contendo a estrutura do array, limites e tipo base (ex: `('ARRAY', min, max, 'INTEGER')`).
+* **Funções:** O valor é um tuplo que armazena a assinatura da função, incluindo o tipo de retorno e a lista de nomes dos argumentos (ex: `('FUNCTION', 'INTEGER', ['arg1', 'arg2'])`).
+
+### Inferência e Verificação de Tipos
+
+A verificação de tipos é suportada pela função auxiliar `obter_tipo(nodo)`, que determina recursivamente o tipo de uma expressão ou termo na AST.
+
+O sistema de tipos implementado segue as seguintes regras:
+
+* **Literais:** Números inteiros são identificados como `'INTEGER'`, reais como `'REAL'`, strings como `'STRING'` e valores lógicos como `'BOOLEAN'`.
+* **Variáveis e Chamadas:** O tipo é recuperado através da consulta à tabela de símbolos.
+* **Operações Aritméticas (`CONTA`):**
+* Operações entre dois inteiros resultam num `'INTEGER'` (exceto a divisão `/`, que resulta em `'REAL'`).
+* Operações que envolvam reais resultam em `'REAL'`.
+* Operações relacionais (como `=`, `<`, `>=`) resultam sempre em `'BOOLEAN'`.
+
+
+
+### Validações Implementadas
+
+O analisador semântico (`analisador_semantico`) percorre os nós da AST e aplica regras específicas para cada estrutura:
+
+1. **Declarações (`VARS` e `DEF_FUNCTION`):**
+As variáveis e funções são inseridas na tabela de símbolos. No caso das funções, é também processado o contexto dos seus argumentos e corpo.
+2. **Atribuições (`ASSIGN`):**
+Verifica-se se a variável alvo foi declarada e se o tipo da expressão atribuída é compatível com o tipo da variável. Caso contrário, é reportado um erro semântico de incompatibilidade de tipos.
+3. **Estruturas de Controlo (`IF`, `WHILE`, `FOR`):**
+* No laço `FOR`, valida-se se a variável de controlo foi declarada e se é, obrigatoriamente, do tipo `'INTEGER'`, conforme exigido pelo standard Pascal simplificado.
+* Nas estruturas condicionais, verifica-se a validade das expressões de teste.
+
+
+4. **Entrada e Saída (`READLN`):**
+Verifica-se se as variáveis passadas como argumento para leitura foram previamente declaradas.
+
+### Tratamento de Erros
+
+Quando uma violação das regras semânticas é detetada (como o uso de uma variável não declarada ou uma operação inválida entre tipos), o compilador emite uma mensagem de erro indicando a natureza do problema (ex: `Erro semântico: tipos diferentes esq: 'INTEGER', dir: 'STRING'`), permitindo ao utilizador corrigir o código fonte antes da fase de geração de código.
+
+
