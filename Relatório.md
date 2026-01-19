@@ -14,7 +14,7 @@ Braga, Portugal
 
 ## Introdução
 
-Este projeto consiste no desenvolvimento de um compilador para a linguagem **Pascal Standard**. O compilador realiza a análise léxica, sintáctica e semântica e gera como resultado código semelhante a **Assembly**, para a [**Máquina Virtual (VM)** ](https://ewvm.epl.di.uminho.pt) disponibilizada no contexto da unidade curricular.
+Este projeto consiste no desenvolvimento de um compilador para a linguagem **Pascal Standard**. O compilador realiza a análise léxica, sintática e semântica e gera como resultado código semelhante a **Assembly**, para a [**Máquina Virtual (VM)** ](https://ewvm.epl.di.uminho.pt) disponibilizada no contexto da unidade curricular.
 
 ----
 ### Como Executar
@@ -68,7 +68,7 @@ O lexer suporta dois tipos de comentários da linguagem Pascal:
 -   Comentários delimitados por `(* *)`.
     
 
-Sempre que um comentário é encontrado, o seu conteúdo é ignorado e o número da linha é actualizado de acordo com o número de newlines (\n) presentes no comentário. Desta forma, os comentários não interferem com a análise sintáctica nem com a contagem das linhas para efeitos de debugging.
+Sempre que um comentário é encontrado, o seu conteúdo é ignorado e o número da linha é actualizado de acordo com o número de newlines (\n) presentes no comentário. Desta forma, os comentários não interferem com a análise sintática nem com a contagem das linhas para efeitos de debugging.
 
 ### Identificadores e palavras reservadas
 
@@ -92,7 +92,7 @@ Sempre que o lexer encontra um carácter que não corresponde a nenhum token vá
 
 ## Implementação do Analisador Sintáctico (Parser)
 
-O analisador sintáctico do compilador foi implementado utilizando o módulo **`ply.yacc`**. O parser tem como principal objectivo validar a estrutura sintáctica dos programas escritos em Pascal e construir uma **representação intermédia** (árvore sintáctica abstracta) que será utilizada nas fases seguintes do compilador, nomeadamente na análise semântica e na geração de código assembly.
+O analisador sintáctico do compilador foi implementado utilizando o módulo **`ply.yacc`**. O parser tem como principal objectivo validar a estrutura sintática dos programas escritos em Pascal e construir uma **representação intermédia** (árvore sintática abstracta) que será utilizada nas fases seguintes do compilador, nomeadamente na análise semântica e na geração de código assembly.
 
 O parser utiliza os tokens definidos pelo analisador lexical, importados directamente a partir do módulo do lexer.
 
@@ -290,3 +290,109 @@ Para aceder a um array, o gerador coloca o endereço base e o valor do índice i
 ### Input e Output
 
 A VM fornece a instrução read, que lê sempre uma sequência de caracteres (string) do input. É emitida a instrução read para colocar a string lida na pilha, se este for Integer, então usa-se atoi para tornar a string no valor númerico correspondente. Para a escrita, usa-se a instrução write que, conforme as suas variações (writei para tipo INTEGER, writef para tipo REAL, writes para tipo STRING), escreve o que for necessário. Usa-se writeln para quebra linha.
+
+Aqui tens uma sugestão de como podes formatar essa secção no relatório. A ideia é mostrar o "antes" e o "depois" lado a lado (ou sequencialmente) e dar uma mini-explicação do que aconteceu.
+
+Podes colar isto logo a seguir à secção onde explicaste o `codeGen.py` ou na secção de "Resultados".
+
+---
+
+## Exemplo Prático de Geração de Código
+
+Para demonstrar o funcionamento do compilador, apresentamos abaixo a compilação do algoritmo de cálculo do **Fatorial**. Este exemplo ilustra a tradução de declarações de variáveis, input/output e ciclos `For`.
+
+### 1. Código Fonte (Pascal)
+
+O ficheiro de entrada `Factorial.txt` contém o seguinte código Pascal Standard:
+
+```pascal
+program Fatorial;
+var
+    n, i, fat: integer; (* n é o input, i o indice para o loop e fat o resultado*)
+begin
+    writeln('Introduza um número inteiro positivo:');
+    readln(n);
+    fat := 1;
+    for i := 1 to n do
+        fat := fat * i;
+    writeln('Fatorial de ', n, ': ', fat);
+end.
+
+```
+
+### 2. Código Gerado (Assembly VM)
+
+Após a compilação, foi gerado o ficheiro `Factorial.vm` com as instruções para a Máquina Virtual. É possível observar a alocação das três variáveis (endereços 0, 1 e 2) e a estrutura do ciclo `For` controlada pelas labels `L1` e `L2`.
+
+```assembly
+start
+    pushi 0      ; Alocação de n (endereço 0)
+    storeg 0
+    pushi 0      ; Alocação de i (endereço 1)
+    storeg 1
+    pushi 0      ; Alocação de fat (endereço 2)
+    storeg 2
+    jump MAIN
+
+MAIN:
+    pushs "Introduza um número inteiro positivo:"
+    writes
+    writeln
+    
+    ; Leitura de n
+    read
+    atoi
+    storeg 0
+    
+    ; fat := 1
+    pushi 1
+    storeg 2
+    
+    ; Inicialização do For (i := 1)
+    pushi 1
+    storeg 1
+
+L1: ; Início do Ciclo
+    pushg 1      ; Carrega i
+    pushg 0      ; Carrega n
+    infeq        ; Verifica se i <= n
+    jz L2        ; Se falso, salta para o fim (L2)
+
+    ; Corpo do Ciclo (fat := fat * i)
+    pushg 2
+    pushg 1
+    mul
+    storeg 2
+
+    ; Incremento do For (i := i + 1)
+    pushg 1
+    pushi 1
+    add
+    storeg 1
+    jump L1      ; Volta ao início do teste
+
+L2: ; Fim do Ciclo
+    pushs "Fatorial de "
+    writes
+    pushg 0      ; Escreve n
+    writei
+    pushs ": "
+    writes
+    pushg 2      ; Escreve fat
+    writei
+    writeln
+stop
+
+```
+
+## Conclusão
+
+Neste projeto, desenvolvemos com sucesso um compilador para a linguagem Pascal Standard, capaz de traduzir código fonte para a linguagem Assembly da Máquina Virtual (VM) disponibilizada.
+
+Através da utilização da linguagem **Python** e da biblioteca **PLY**, implementámos todas as etapas fundamentais de um compilador:
+
+1. **Análise Léxica e Sintática:** Reconhecimento correto dos tokens e da gramática da linguagem.
+2. **Análise Semântica:** Validação robusta de tipos e declarações através de uma Tabela de Símbolos global.
+3. **Geração de Código:** Tradução eficaz das estruturas de controlo (`if`, `while`, `for`), manipulação de arrays e suporte a subprogramas (funções).
+
+Os testes realizados com algoritmos clássicos, como o cálculo do Fatorial, a série de Fibonacci e o Bubble Sort, demonstraram que o compilador gera código correto e funcional. Este trabalho permitiu-nos consolidar os conhecimentos teóricos sobre o funcionamento interno de compiladores, especialmente no que toca à gestão de memória, recursividade e à importância de uma análise semântica rigorosa para a prevenção de erros.
